@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
+import { isDev } from "./util.js";
 
 app.on("ready", () => {
   let mainWindow = new BrowserWindow({
@@ -9,6 +10,10 @@ app.on("ready", () => {
       nodeIntegration: true,
     },
   });
-  //set up dynamic path
-  mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
+  if (isDev()) {
+    mainWindow.loadURL("http://localhost:5123");
+  } else {
+    //set up dynamic path
+    mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
+  }
 });
