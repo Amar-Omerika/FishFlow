@@ -3,8 +3,10 @@ import path from "path";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getPreloadPath } from "./pathResolver.js";
 import { getStaticData, pollResources } from "./resoruceManager.js";
+import { initDatabase } from "./database.js";
 
-app.on("ready", () => {
+app.on("ready", async () => {
+  const db = await initDatabase();
   let mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,

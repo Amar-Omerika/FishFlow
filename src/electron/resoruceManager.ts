@@ -6,7 +6,7 @@ import { ipcWebContentsSend } from "./util.js";
 
 const POLLING_INTERVAL = 500;
 
-//function that gets statistic about ram cpu and storage usage every 500ms
+//function that gets statistic about ram cpu and storage usage every 500ms, good for debug if needed
 export function pollResources(mainWindow: BrowserWindow) {
   setInterval(async () => {
     const cpuUsage = await getCpuUsage();
