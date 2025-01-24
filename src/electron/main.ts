@@ -1,13 +1,20 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
-import { isDev } from "./util.js";
+import { ipcMainHandle, isDev } from "./util.js";
+import { getPreloadPath } from "./pathResolver.js";
+import { getStaticData, pollResources } from "./resoruceManager.js";
+import { initDatabase } from "./database.js";
 
-app.on("ready", () => {
+app.on("ready", async () => {
+  const db = await initDatabase();
   let mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true,
+      //this is the correct approach
+      preload: getPreloadPath(),
+      //this is not good in terms of security reasons, because we can access node.js from the browser window
+      // nodeIntegration: true,
     },
   });
   if (isDev()) {
@@ -16,4 +23,10 @@ app.on("ready", () => {
     //set up dynamic path
     mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
   }
+
+  pollResources(mainWindow);
+
+  ipcMainHandle("getStaticData", () => {
+    return getStaticData();
+  });
 });

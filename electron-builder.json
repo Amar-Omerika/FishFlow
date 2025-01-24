@@ -1,6 +1,7 @@
 {
     "appId": "com.a-electron-fisherman-app",
-    "files": ["dist-electron", "dist-react"],
+    "files": ["dist-electron", "dist-react","src/electron/database.sqlite"],
+    "extraResources": ["dist-electron/preload.cjs", "src/assets/**,src/components/**"],
     "icon": "./desktopIcon.jpg",
     "mac": {
       "target": "dmg"
