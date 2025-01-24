@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import NavBar from "./NavBar";
 
 interface ContainerProps {
   children: ReactNode;
@@ -7,9 +8,8 @@ interface ContainerProps {
 const Layout: React.FC<ContainerProps> = ({ children }) => {
   return (
     <section>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {/* <Navbar /> */}
-        <div style={{ color: "red" }}>aaaaa</div>
+      <div>
+        <NavBar />
         {children}
       </div>
     </section>
