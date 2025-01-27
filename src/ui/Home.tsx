@@ -15,6 +15,7 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
+import CustomTable from "./components/Table";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -87,6 +88,8 @@ const Home = () => {
             Pretrazi
           </Button>
         </Container>
+        <div style={{ height: 20 }} />
+        <CustomTable />
       </StyledContainer>
     </LocalizationProvider>
   );
