@@ -7,11 +7,11 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import desktopIcon from "../assets/desktopIcon.jpg";
+import { COLORS } from "../constants/constants";
 
 const pages = ["Clanovi po godinama", "Svi Clanovi"];
 
@@ -101,7 +101,7 @@ const Navbar = () => {
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block", mx: 2 }}
-                style={{ backgroundColor: "#48A6A7" }}
+                style={{ backgroundColor: COLORS.primary }}
               >
                 {page}
               </Button>

@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../Home";
+import { lazy, Suspense } from "react";
 import Layout from "./Layout";
+
+const Home = lazy(() => import("../Home"));
 
 const AppRouter = () => {
   return (
@@ -9,7 +11,9 @@ const AppRouter = () => {
         path="/"
         element={
           <Layout>
-            <Home />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Home />
+            </Suspense>
           </Layout>
         }
       />
