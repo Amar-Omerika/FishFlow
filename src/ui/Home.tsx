@@ -17,6 +17,8 @@ import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import TableHeadData from "./placeholderData";
+import AddKorisnikModal from "./components/Modals/AddKorisnikModal";
+import { ToastContainer } from "react-toastify";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -26,13 +28,16 @@ const Home = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
-    console.log(section);
   };
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
+  };
+  const handleAddKorisnikModal = () => {
+    setShowAddModal(true);
   };
 
   return (
@@ -41,7 +46,10 @@ const Home = () => {
         <div
           style={{ display: "flex", justifyContent: "end", marginTop: "10px" }}
         >
-          <Button style={{ backgroundColor: COLORS.primary, color: "#fff" }}>
+          <Button
+            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
+            onClick={handleAddKorisnikModal}
+          >
             Dodaj Korisnika
           </Button>
         </div>
@@ -92,6 +100,12 @@ const Home = () => {
         <div style={{ height: 20 }} />
         <CustomTable headerData={TableHeadData} />
       </StyledContainer>
+      <AddKorisnikModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onCreate={handleAddKorisnikModal}
+      />
+      <ToastContainer />
     </LocalizationProvider>
   );
 };

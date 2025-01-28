@@ -9,7 +9,7 @@ const TableHeadData: TableHeadDataInterface[] = [
     title: "ImePrezime",
   },
   {
-    title: "Iznos",
+    title: "Iznos KM",
   },
   {
     title: "Adresa Stanovanja",
