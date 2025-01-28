@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
+import TableHeadData from "./placeholderData";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -89,7 +90,7 @@ const Home = () => {
           </Button>
         </Container>
         <div style={{ height: 20 }} />
-        <CustomTable />
+        <CustomTable headerData={TableHeadData} />
       </StyledContainer>
     </LocalizationProvider>
   );

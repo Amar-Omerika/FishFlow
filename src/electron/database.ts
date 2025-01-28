@@ -35,6 +35,7 @@ export async function initDatabase() {
       IznosKM REAL NOT NULL,
       Status TEXT NOT NULL,
       Napomena TEXT,
+      Prijava TEXT,
       FOREIGN KEY (KorisnikID) REFERENCES Korisnici(KorisnikID)
     );
   `);
