@@ -73,6 +73,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
   };
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
+    console.log(newValue);
   };
   return ReactDOM.createPortal(
     <LocalizationProvider dateAdapter={AdapterDayjs}>
