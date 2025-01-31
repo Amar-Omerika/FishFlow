@@ -24,24 +24,21 @@ const StyledContainer = styled(Container)({
   padding: "5px",
 });
 
-const Home = () => {
+const Users = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
-  const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
   };
-  const handleYearChange = (newValue: Dayjs | null) => {
-    setSelectedYear(newValue);
-  };
+
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <>
       <StyledContainer>
         <div
           style={{ display: "flex", justifyContent: "end", marginTop: "10px" }}
@@ -50,7 +47,7 @@ const Home = () => {
             style={{ backgroundColor: COLORS.primary, color: "#fff" }}
             onClick={handleAddKorisnikModal}
           >
-            Dodaj Korisnika
+            Dodaj Novog Korisnika
           </Button>
         </div>
         <Container
@@ -86,20 +83,6 @@ const Home = () => {
               <MenuItem value={30}>Spanski Logor</MenuItem>
             </Select>
           </FormControl>
-          <DatePicker
-            views={["year"]}
-            label="Odaberi Godinu"
-            value={selectedYear}
-            onChange={handleYearChange}
-            slots={{ textField: TextField }}
-            slotProps={{
-              textField: {
-                // Props for the TextField
-                variant: "outlined", // Or whatever variant you want
-                // ... any other TextField props
-              },
-            }}
-          />
           <Button style={{ backgroundColor: COLORS.primary, color: "#fff" }}>
             Pretrazi
           </Button>
@@ -113,8 +96,8 @@ const Home = () => {
         onCreate={handleAddKorisnikModal}
       />
       <ToastContainer />
-    </LocalizationProvider>
+    </>
   );
 };
 
-export default Home;
+export default Users;

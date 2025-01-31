@@ -73,7 +73,6 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
   };
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
-    console.log(newValue);
   };
   return ReactDOM.createPortal(
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -108,9 +107,14 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                       label="Odaberi Godinu"
                       value={selectedYear}
                       onChange={handleYearChange}
-                      renderInput={(params: Dayjs | null) => (
-                        <TextField {...params} />
-                      )}
+                      slots={{ textField: TextField }}
+                      slotProps={{
+                        textField: {
+                          // Props for the TextField
+                          variant: "outlined", // Or whatever variant you want
+                          // ... any other TextField props
+                        },
+                      }}
                     />
                     <Autocomplete
                       disablePortal
