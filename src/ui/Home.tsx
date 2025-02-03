@@ -17,7 +17,7 @@ import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import TableHeadData from "./placeholderData";
-import AddKorisnikModal from "./components/Modals/AddKorisnikModal";
+import AddKorisnikModal from "./components/Modals/addkorisnikmodals/AddKorisnikModal";
 import { ToastContainer } from "react-toastify";
 
 const StyledContainer = styled(Container)({

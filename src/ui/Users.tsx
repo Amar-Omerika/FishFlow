@@ -13,8 +13,8 @@ import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import TableHeadData from "./placeholderData";
-import AddKorisnikModal from "./components/Modals/AddKorisnikModal";
 import { ToastContainer } from "react-toastify";
+import AddNewKorisnikModal from "./components/Modals/addnewkorisnikmodals/AddNewKorisnik";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -86,7 +86,7 @@ const Users = () => {
         <div style={{ height: 20 }} />
         <CustomTable headerData={TableHeadData} />
       </StyledContainer>
-      <AddKorisnikModal
+      <AddNewKorisnikModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onCreate={handleAddKorisnikModal}
