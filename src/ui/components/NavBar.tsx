@@ -12,8 +12,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import desktopIcon from "../assets/desktopIcon.jpg";
 import { COLORS } from "../constants/constants";
+import { Link } from "react-router-dom";
 
-const pages = ["Clanovi po godinama", "Svi Clanovi"];
+const pages = [
+  { title: "Clanovi po godinama", link: "/" },
+  { title: "Svi Clanovi", link: "/users" },
+];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -82,9 +86,13 @@ const Navbar = () => {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+              {pages?.map((page) => (
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <Link to={page.link} style={{ textDecoration: "none" }}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      {page.title}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -96,15 +104,20 @@ const Navbar = () => {
               justifyContent: "flex-end",
             }}
           >
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block", mx: 2 }}
-                style={{ backgroundColor: COLORS.primary }}
+            {pages?.map((page) => (
+              <Link
+                to={page.link}
+                style={{ textDecoration: "none", color: "white" }}
               >
-                {page}
-              </Button>
+                <Button
+                  key={page.title}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block", mx: 2 }}
+                  style={{ backgroundColor: COLORS.primary }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
