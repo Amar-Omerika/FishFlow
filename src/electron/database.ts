@@ -42,3 +42,19 @@ export async function initDatabase() {
 
   return db;
 }
+
+export async function fetchAllKorisnici() {
+  const db = await initDatabase();
+  const korisnici = await db.all(`
+    SELECT 
+      Korisnici.*, 
+      Sekcije.NazivSekcije 
+    FROM 
+      Korisnici 
+    JOIN 
+      Sekcije 
+    ON 
+      Korisnici.SekcijaID = Sekcije.SekcijaID
+  `);
+  return korisnici;
+}

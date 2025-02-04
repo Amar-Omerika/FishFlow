@@ -1,7 +1,8 @@
 export interface TableHeadDataInterface {
   title: string;
 }
-const TableHeadData: TableHeadDataInterface[] = [
+
+export const TableHeadData: TableHeadDataInterface[] = [
   {
     title: "Broj Registra",
   },
@@ -33,5 +34,3 @@ const TableHeadData: TableHeadDataInterface[] = [
     title: "Prijava",
   },
 ];
-
-export default TableHeadData;

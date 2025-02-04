@@ -106,6 +106,7 @@ const Navbar = () => {
           >
             {pages?.map((page) => (
               <Link
+                key={page.title}
                 to={page.link}
                 style={{ textDecoration: "none", color: "white" }}
               >

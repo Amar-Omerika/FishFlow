@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -12,7 +12,6 @@ import {
 import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
-import TableHeadData from "./placeholderData";
 import { ToastContainer } from "react-toastify";
 import AddNewKorisnikModal from "./components/Modals/addnewkorisnikmodals/AddNewKorisnik";
 
@@ -21,9 +20,19 @@ const StyledContainer = styled(Container)({
 });
 
 const Users = () => {
+  const [data, setData] = useState<any[]>([]);
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    const fetchKorisnici = async () => {
+      const data = await window.electron.fetchAllKorisnici();
+      setData(data);
+    };
+    fetchKorisnici();
+    console.log("data", data);
+  }, []);
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
@@ -84,7 +93,7 @@ const Users = () => {
           </Button>
         </Container>
         <div style={{ height: 20 }} />
-        <CustomTable headerData={TableHeadData} />
+        <CustomTable rows={data} />
       </StyledContainer>
       <AddNewKorisnikModal
         isOpen={showAddModal}

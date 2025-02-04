@@ -7,7 +7,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { TableHeadDataInterface } from "../placeholderData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -23,56 +22,39 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function CustomTable({
-  headerData,
+  rows = [],
 }: {
-  headerData: TableHeadDataInterface[];
+  rows?: Record<string, any>[];
 }) {
+  const excludedKeys = ["SekcijaID", "KorisnikID"];
+
+  // Dynamically restructure the table based on the data
+  const allKeys = Array.from(new Set(rows.flatMap(Object.keys))).filter(
+    (key) => !excludedKeys.includes(key)
+  );
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            {headerData &&
-              headerData.map((data, index) => (
-                <StyledTableCell key={index}>{data.title}</StyledTableCell>
-              ))}
+            {allKeys?.map((key) => (
+              <StyledTableCell key={key}>{key}</StyledTableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.calories}</StyledTableCell>
-              <StyledTableCell align="center">{row.fat}</StyledTableCell>
-              <StyledTableCell align="center">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="center">{row.protein}</StyledTableCell>
+          {rows.map((row, rowIndex) => (
+            <StyledTableRow key={rowIndex}>
+              {allKeys.map((key) => (
+                <StyledTableCell key={key}>{row[key] || "-"}</StyledTableCell>
+              ))}
             </StyledTableRow>
           ))}
         </TableBody>

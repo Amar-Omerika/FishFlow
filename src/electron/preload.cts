@@ -10,6 +10,7 @@ electron.contextBridge.exposeInMainWorld("electron", {
       callback(view);
     }),
   getStaticData: () => ipcInvoke("getStaticData"),
+  fetchAllKorisnici: () => ipcInvoke("fetchAllKorisnici"),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
 } satisfies Window["electron"]);
 
