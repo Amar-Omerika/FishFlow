@@ -21,6 +21,7 @@ export async function initDatabase() {
       KorisnikID INTEGER PRIMARY KEY AUTOINCREMENT,
       ImePrezime TEXT NOT NULL,
       JMBG TEXT NOT NULL,
+      AdresaStanovanja TEXT NOT NULL,
       SekcijaID INTEGER NOT NULL,
       FOREIGN KEY (SekcijaID) REFERENCES Sekcije(SekcijaID)
     );
@@ -31,7 +32,6 @@ export async function initDatabase() {
       KorisnikID INTEGER NOT NULL,
       BrojRegistra TEXT NOT NULL,
       KontaktTelefon TEXT NOT NULL,
-      AdresaStanovanja TEXT NOT NULL,
       IznosKM REAL NOT NULL,
       Status TEXT NOT NULL,
       Napomena TEXT,
