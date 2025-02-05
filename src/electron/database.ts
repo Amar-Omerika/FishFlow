@@ -75,11 +75,10 @@ export async function addKorisnici(
 
 export async function deleteKorisnik(KorisnikID: number) {
   const db = await initDatabase();
-  const result = await db.run(
-    `DELETE FROM Korisnici
-    WHERE ${KorisnikID};`
-  );
-  return result.lastID;
+  const result = await db.run(`DELETE FROM Korisnici WHERE KorisnikID = ?`, [
+    KorisnikID,
+  ]);
+  return result.changes;
 }
 
 export async function fetchSekcije() {

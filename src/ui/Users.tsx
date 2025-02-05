@@ -14,6 +14,7 @@ import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import { ToastContainer } from "react-toastify";
 import AddNewKorisnikModal from "./components/Modals/addnewkorisnikmodals/AddNewKorisnik";
+import DeleteModal from "./components/DeleteModal";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -24,6 +25,8 @@ const Users = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedKorisnik, setSelectedKorisnik] = useState<any>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
 
   const fetchKorisnici = async () => {
@@ -34,6 +37,7 @@ const Users = () => {
   useEffect(() => {
     fetchKorisnici();
   }, []);
+
   useEffect(() => {
     const fetchSekcije = async () => {
       const data = await window.electron.fetchSekcije();
@@ -53,6 +57,23 @@ const Users = () => {
   const handleModalClose = () => {
     setShowAddModal(false);
     fetchKorisnici();
+  };
+
+  const handleDelete = async () => {
+    if (selectedKorisnik) {
+      await window.electron.deleteKorisnik(selectedKorisnik.KorisnikID);
+      fetchKorisnici();
+      setShowDeleteModal(false);
+    }
+  };
+
+  const handleDeleteModalOpen = (korisnik: any) => {
+    setSelectedKorisnik(korisnik);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setShowDeleteModal(false);
   };
 
   return (
@@ -110,14 +131,21 @@ const Users = () => {
         <div style={{ height: 20 }} />
         <CustomTable
           rows={data}
-          onEdit={() => console.log("22")}
-          onDelete={() => console.log("aa")}
+          onEdit={() => console.log("Edit")}
+          onDelete={handleDeleteModalOpen}
         />
       </StyledContainer>
       <AddNewKorisnikModal
         isOpen={showAddModal}
         onClose={handleModalClose}
         onCreate={handleAddKorisnikModal}
+      />
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteModalClose}
+        onDelete={handleDelete}
+        title="Obrisi Korisnika"
+        content="Da li ste sigurni da zelite obrisati ovoga korisnika?"
       />
       <ToastContainer />
     </>

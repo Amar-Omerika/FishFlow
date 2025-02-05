@@ -6,6 +6,7 @@ import { getStaticData, pollResources } from "./resoruceManager.js";
 import {
   fetchAllKorisnici,
   addKorisnici,
+  deleteKorisnik,
   fetchSekcije,
   initDatabase,
 } from "./database.js";
@@ -45,5 +46,9 @@ app.on("ready", async () => {
   ipcMainHandle("addKorisnici", async (event, korisnik) => {
     const { ImePrezime, JMBG, AdresaStanovanja, SekcijaID } = korisnik;
     return await addKorisnici(ImePrezime, JMBG, AdresaStanovanja, SekcijaID);
+  });
+
+  ipcMainHandle("deleteKorisnik", async (event, KorisnikID) => {
+    return await deleteKorisnik(KorisnikID);
   });
 });

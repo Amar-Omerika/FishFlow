@@ -7,21 +7,21 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Paper, // For styling the modal content
+  Paper,
 } from "@mui/material";
-import { styled } from "@mui/material/styles"; // For custom styling
+import { styled } from "@mui/material/styles";
 
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
-  title?: string; // Make title prop optional
-  content?: string; // Make content prop optional
+  title?: string;
+  content?: string;
 }
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3), // Add some padding
-  borderRadius: theme.shape.borderRadius, // Rounded corners
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
 }));
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
@@ -42,12 +42,11 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           PaperComponent={StyledPaper}
-          {...motion.div({
-            initial: { scale: 0.8, opacity: 0 },
-            animate: { scale: 1, opacity: 1 },
-            exit: { scale: 0.8, opacity: 0 },
-            transition: { duration: 0.2 },
-          })}
+          TransitionComponent={motion.div}
+          transition={{ duration: 0.2 }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
         >
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
           <DialogContent>
@@ -55,10 +54,10 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} color="primary">
-              Da
+              Ne
             </Button>
             <Button onClick={onDelete} color="error" autoFocus>
-              Ne
+              Da
             </Button>
           </DialogActions>
         </Dialog>
