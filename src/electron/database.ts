@@ -73,6 +73,15 @@ export async function addKorisnici(
   return result.lastID;
 }
 
+export async function deleteKorisnik(KorisnikID: number) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `DELETE FROM Korisnici
+    WHERE ${KorisnikID};`
+  );
+  return result.lastID;
+}
+
 export async function fetchSekcije() {
   const db = await initDatabase();
   const sekcije = await db.all(`
