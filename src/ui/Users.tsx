@@ -24,14 +24,22 @@ const Users = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [sekcije, setSekcije] = useState<any[]>([]);
+
+  const fetchKorisnici = async () => {
+    const data = await window.electron.fetchAllKorisnici();
+    setData(data);
+  };
 
   useEffect(() => {
-    const fetchKorisnici = async () => {
-      const data = await window.electron.fetchAllKorisnici();
-      setData(data);
-    };
     fetchKorisnici();
-    console.log("data", data);
+  }, []);
+  useEffect(() => {
+    const fetchSekcije = async () => {
+      const data = await window.electron.fetchSekcije();
+      setSekcije(data);
+    };
+    fetchSekcije();
   }, []);
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
@@ -40,6 +48,11 @@ const Users = () => {
 
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowAddModal(false);
+    fetchKorisnici();
   };
 
   return (
@@ -83,9 +96,11 @@ const Users = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Stari - Grad</MenuItem>
-              <MenuItem value={20}>Fejiceva</MenuItem>
-              <MenuItem value={30}>Spanski Logor</MenuItem>
+              {sekcije.map((sekcija) => (
+                <MenuItem key={sekcija.SekcijaID} value={sekcija.SekcijaID}>
+                  {sekcija.NazivSekcije}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <Button style={{ backgroundColor: COLORS.primary, color: "#fff" }}>
@@ -101,7 +116,7 @@ const Users = () => {
       </StyledContainer>
       <AddNewKorisnikModal
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+        onClose={handleModalClose}
         onCreate={handleAddKorisnikModal}
       />
       <ToastContainer />
