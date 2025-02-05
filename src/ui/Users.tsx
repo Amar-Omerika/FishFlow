@@ -93,7 +93,11 @@ const Users = () => {
           </Button>
         </Container>
         <div style={{ height: 20 }} />
-        <CustomTable rows={data} />
+        <CustomTable
+          rows={data}
+          onEdit={() => console.log("22")}
+          onDelete={() => console.log("aa")}
+        />
       </StyledContainer>
       <AddNewKorisnikModal
         isOpen={showAddModal}

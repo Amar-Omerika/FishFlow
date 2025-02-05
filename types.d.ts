@@ -9,6 +9,12 @@ type StaticData = {
   cpuModel: string;
   totalMemoryGB: number;
 };
+type NewKorisnikData = {
+  ImePrezime: string;
+  JMBG: string;
+  AdresaStanovanja: string;
+  SekcijaID: number;
+};
 
 type View = "CPU" | "RAM" | "STORAGE";
 
@@ -18,6 +24,7 @@ type EventPayloadMapping = {
   statistics: Statistics;
   getStaticData: StaticData;
   fetchAllKorisnici: any;
+  addKorisnici: any;
   changeView: View;
   sendFrameAction: FrameWindowAction;
 };
@@ -31,6 +38,7 @@ interface Window {
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
     fetchAllKorisnici: () => Promise<any>;
+    addKorisnici: (korisnik: NewKorisnikData) => void;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;

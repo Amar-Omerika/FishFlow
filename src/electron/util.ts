@@ -1,4 +1,9 @@
-import { ipcMain, WebContents, WebFrameMain } from "electron";
+import {
+  ipcMain,
+  WebContents,
+  WebFrameMain,
+  IpcMainInvokeEvent,
+} from "electron";
 import { getUIPath } from "./pathResolver.js";
 import { pathToFileURL } from "url";
 
@@ -9,17 +14,24 @@ export function isDev(): boolean {
 interface EventPayloadMapping {
   [key: string]: any;
 }
+
 export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
-  key: any,
-  handler: () => EventPayloadMapping[Key]
+  key: Key | any,
+  handler: (
+    event: IpcMainInvokeEvent,
+    ...args: any[]
+  ) => EventPayloadMapping[Key]
 ) {
-  ipcMain.handle(key, (event: any) => {
-    validateEventFrame(event.senderFrame);
-    return handler();
+  ipcMain.handle(key, (event: IpcMainInvokeEvent, ...args: any[]) => {
+    if (event.senderFrame) {
+      validateEventFrame(event.senderFrame);
+    }
+    return handler(event, ...args);
   });
 }
+
 export function ipcMainOn<Key extends keyof EventPayloadMapping>(
-  key: any,
+  key: Key | any,
   handler: (payload: EventPayloadMapping[Key]) => void
 ) {
   ipcMain.on(key, (event: any, payload) => {
@@ -29,7 +41,7 @@ export function ipcMainOn<Key extends keyof EventPayloadMapping>(
 }
 
 export function ipcWebContentsSend<Key extends keyof EventPayloadMapping>(
-  key: any,
+  key: Key | any,
   webContents: WebContents,
   payload: EventPayloadMapping[Key]
 ) {

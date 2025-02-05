@@ -58,3 +58,17 @@ export async function fetchAllKorisnici() {
   `);
   return korisnici;
 }
+
+export async function addKorisnici(
+  ImePrezime: string,
+  JMBG: string,
+  AdresaStanovanja: string,
+  SekcijaID: number
+) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `INSERT INTO Korisnici (ImePrezime, JMBG, AdresaStanovanja, SekcijaID) VALUES (?, ?, ?, ?)`,
+    [ImePrezime, JMBG, AdresaStanovanja, SekcijaID]
+  );
+  return result.lastID;
+}

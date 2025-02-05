@@ -1,4 +1,3 @@
-// cSpell:words brojRegistra imePrezime adresaStanovanja kontaktTelefon sekcija jmbg iznos km napomena prijava uspijesno dodan dodavanju korisnika greska dodavanje korisnik korisniku korisnikom
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,12 +9,12 @@ import {
   Typography,
   Modal,
   Paper,
-  Autocomplete,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
+
 interface AddKorisnikModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -30,12 +29,15 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
   const [korisnikInfo, setKorisnikInfo] = useState({
     imePrezime: "",
     jmbg: "",
+    adresaStanovanja: "",
+    sekcijaID: "",
   });
-  const [section, setSection] = useState<string>("");
 
   const [errors, setErrors] = useState({
     imePrezime: "",
     jmbg: "",
+    adresaStanovanja: "",
+    sekcijaID: "",
   });
 
   if (!isOpen) return null;
@@ -51,12 +53,23 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
       [name]: "",
     }));
   };
+
   const handleChangeSection = (event: any) => {
-    setSection(event.target.value as string);
+    setKorisnikInfo((prevState) => ({
+      ...prevState,
+      sekcijaID: event.target.value as string,
+    }));
   };
 
   const handleCreate = async () => {
     try {
+      const { imePrezime, jmbg, adresaStanovanja, sekcijaID } = korisnikInfo;
+      await window.electron.addKorisnici({
+        ImePrezime: imePrezime,
+        JMBG: jmbg,
+        AdresaStanovanja: adresaStanovanja,
+        SekcijaID: parseInt(sekcijaID),
+      });
       toast.success("Korisnik uspijesno dodan");
       onCreate();
       onClose();
@@ -95,14 +108,21 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                   <TextField
                     label="Ime i Prezime"
                     name="imePrezime"
-                    value={korisnikInfo?.imePrezime}
+                    value={korisnikInfo.imePrezime}
                     onChange={handleChange}
                     fullWidth
                   />
                   <TextField
                     label="JMBG"
                     name="jmbg"
-                    value={korisnikInfo?.jmbg}
+                    value={korisnikInfo.jmbg}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Adresa Stanovanja"
+                    name="adresaStanovanja"
+                    value={korisnikInfo.adresaStanovanja}
                     onChange={handleChange}
                     fullWidth
                   />
@@ -111,7 +131,7 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     <Select
                       labelId="section-label"
                       id="section-select"
-                      value={section}
+                      value={korisnikInfo.sekcijaID}
                       onChange={handleChangeSection as any}
                       label="Sekcija"
                     >

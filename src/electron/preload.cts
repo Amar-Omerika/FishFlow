@@ -11,13 +11,19 @@ electron.contextBridge.exposeInMainWorld("electron", {
     }),
   getStaticData: () => ipcInvoke("getStaticData"),
   fetchAllKorisnici: () => ipcInvoke("fetchAllKorisnici"),
+  addKorisnici: (korisnik: any) => ipcInvoke("addKorisnici", korisnik),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
 } satisfies Window["electron"]);
 
+//ipcInvoke: This method sends an asynchronous message from the renderer process to
+// the main process and expects a response. It returns a promise that resolves with the
+//  result from the main process. It's useful when you need to perform an action and wait
+//  for a result
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
-  key: Key
+  key: Key,
+  ...args: any[]
 ): Promise<EventPayloadMapping[Key]> {
-  return electron.ipcRenderer.invoke(key);
+  return electron.ipcRenderer.invoke(key, ...args);
 }
 
 function ipcOn<Key extends keyof EventPayloadMapping>(
@@ -29,6 +35,9 @@ function ipcOn<Key extends keyof EventPayloadMapping>(
   return () => electron.ipcRenderer.off(key, cb);
 }
 
+//ipcSend: This method sends an asynchronous message from the renderer process
+//to the main process. It does not expect a response. It's useful for fire-and-forget
+//scenarios where you don't need to wait for a result.
 function ipcSend<Key extends keyof EventPayloadMapping>(
   key: Key,
   payload: EventPayloadMapping[Key]
