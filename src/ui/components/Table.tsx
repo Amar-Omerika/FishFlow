@@ -7,6 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,12 +32,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CustomTable({
   rows = [],
+  onEdit,
+  onDelete,
 }: {
   rows?: Record<string, any>[];
+  onEdit: (row: Record<string, any>) => void;
+  onDelete: (row: Record<string, any>) => void;
 }) {
   const excludedKeys = ["SekcijaID", "KorisnikID"];
 
-  // Dynamically restructure the table based on the data
   const allKeys = Array.from(new Set(rows.flatMap(Object.keys))).filter(
     (key) => !excludedKeys.includes(key)
   );
@@ -44,9 +50,10 @@ export default function CustomTable({
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            {allKeys?.map((key) => (
+            {allKeys.map((key) => (
               <StyledTableCell key={key}>{key}</StyledTableCell>
             ))}
+            <StyledTableCell key="actions">Uredi / Obrisi</StyledTableCell>{" "}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,6 +62,14 @@ export default function CustomTable({
               {allKeys.map((key) => (
                 <StyledTableCell key={key}>{row[key] || "-"}</StyledTableCell>
               ))}
+              <StyledTableCell key="actions">
+                <IconButton aria-label="edit" onClick={() => onEdit(row)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton aria-label="delete" onClick={() => onDelete(row)}>
+                  <DeleteIcon />
+                </IconButton>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
