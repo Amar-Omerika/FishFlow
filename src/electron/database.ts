@@ -72,3 +72,15 @@ export async function addKorisnici(
   );
   return result.lastID;
 }
+
+export async function fetchSekcije() {
+  const db = await initDatabase();
+  const sekcije = await db.all(`
+    SELECT 
+      SekcijaID, 
+      NazivSekcije 
+    FROM 
+      Sekcije
+  `);
+  return sekcije;
+}

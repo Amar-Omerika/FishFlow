@@ -12,6 +12,7 @@ electron.contextBridge.exposeInMainWorld("electron", {
   getStaticData: () => ipcInvoke("getStaticData"),
   fetchAllKorisnici: () => ipcInvoke("fetchAllKorisnici"),
   addKorisnici: (korisnik: any) => ipcInvoke("addKorisnici", korisnik),
+  fetchSekcije: () => ipcInvoke("fetchSekcije"),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
 } satisfies Window["electron"]);
 

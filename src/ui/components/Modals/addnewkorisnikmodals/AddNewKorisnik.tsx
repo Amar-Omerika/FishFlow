@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
@@ -39,6 +39,16 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     adresaStanovanja: "",
     sekcijaID: "",
   });
+
+  const [sekcije, setSekcije] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchSekcije = async () => {
+      const data = await window.electron.fetchSekcije();
+      setSekcije(data);
+    };
+    fetchSekcije();
+  }, []);
 
   if (!isOpen) return null;
 
@@ -138,9 +148,14 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value={10}>Stari - Grad</MenuItem>
-                      <MenuItem value={20}>Fejiceva</MenuItem>
-                      <MenuItem value={30}>Spanski Logor</MenuItem>
+                      {sekcije.map((sekcija) => (
+                        <MenuItem
+                          key={sekcija.SekcijaID}
+                          value={sekcija.SekcijaID}
+                        >
+                          {sekcija.NazivSekcije}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
 

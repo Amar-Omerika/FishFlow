@@ -3,7 +3,12 @@ import path from "path";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getPreloadPath } from "./pathResolver.js";
 import { getStaticData, pollResources } from "./resoruceManager.js";
-import { fetchAllKorisnici, addKorisnici, initDatabase } from "./database.js";
+import {
+  fetchAllKorisnici,
+  addKorisnici,
+  fetchSekcije,
+  initDatabase,
+} from "./database.js";
 
 app.on("ready", async () => {
   const db = await initDatabase();
@@ -32,6 +37,9 @@ app.on("ready", async () => {
 
   ipcMainHandle("fetchAllKorisnici", async () => {
     return await fetchAllKorisnici();
+  });
+  ipcMainHandle("fetchSekcije", async () => {
+    return await fetchSekcije();
   });
 
   ipcMainHandle("addKorisnici", async (event, korisnik) => {

@@ -24,6 +24,7 @@ type EventPayloadMapping = {
   statistics: Statistics;
   getStaticData: StaticData;
   fetchAllKorisnici: any;
+  fetchSekcije: any;
   addKorisnici: any;
   changeView: View;
   sendFrameAction: FrameWindowAction;
@@ -38,6 +39,7 @@ interface Window {
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
     fetchAllKorisnici: () => Promise<any>;
+    fetchSekcije: () => Promise<any>;
     addKorisnici: (korisnik: NewKorisnikData) => void;
     subscribeChangeView: (
       callback: (view: View) => void
