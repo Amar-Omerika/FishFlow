@@ -81,6 +81,21 @@ export async function deleteKorisnik(KorisnikID: number) {
   return result.changes;
 }
 
+export async function updateKorisnik(
+  KorisnikID: number,
+  ImePrezime: string,
+  JMBG: string,
+  AdresaStanovanja: string,
+  SekcijaID: number
+) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `UPDATE Korisnici SET ImePrezime = ?, JMBG = ?, AdresaStanovanja = ?, SekcijaID = ? WHERE KorisnikID = ?`,
+    [ImePrezime, JMBG, AdresaStanovanja, SekcijaID, KorisnikID]
+  );
+  return result.changes;
+}
+
 export async function fetchSekcije() {
   const db = await initDatabase();
   const sekcije = await db.all(`

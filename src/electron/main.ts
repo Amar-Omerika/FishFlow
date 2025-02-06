@@ -8,6 +8,7 @@ import {
   addKorisnici,
   deleteKorisnik,
   fetchSekcije,
+  updateKorisnik,
   initDatabase,
 } from "./database.js";
 
@@ -17,16 +18,12 @@ app.on("ready", async () => {
     width: 1000,
     height: 800,
     webPreferences: {
-      //this is the correct approach
       preload: getPreloadPath(),
-      //this is not good in terms of security reasons, because we can access node.js from the browser window
-      // nodeIntegration: true,
     },
   });
   if (isDev()) {
     mainWindow.loadURL("http://localhost:5123");
   } else {
-    //set up dynamic path
     mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
   }
 
@@ -39,6 +36,7 @@ app.on("ready", async () => {
   ipcMainHandle("fetchAllKorisnici", async () => {
     return await fetchAllKorisnici();
   });
+
   ipcMainHandle("fetchSekcije", async () => {
     return await fetchSekcije();
   });
@@ -50,5 +48,17 @@ app.on("ready", async () => {
 
   ipcMainHandle("deleteKorisnik", async (event, KorisnikID) => {
     return await deleteKorisnik(KorisnikID);
+  });
+
+  ipcMainHandle("updateKorisnik", async (event, korisnik) => {
+    const { KorisnikID, ImePrezime, JMBG, AdresaStanovanja, SekcijaID } =
+      korisnik;
+    return await updateKorisnik(
+      KorisnikID,
+      ImePrezime,
+      JMBG,
+      AdresaStanovanja,
+      SekcijaID
+    );
   });
 });

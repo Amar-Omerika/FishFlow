@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogTitle,
@@ -42,11 +42,6 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           PaperComponent={StyledPaper}
-          TransitionComponent={motion.div}
-          transition={{ duration: 0.2 }}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
         >
           <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
           <DialogContent>

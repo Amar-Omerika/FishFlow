@@ -14,7 +14,9 @@ import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import { ToastContainer } from "react-toastify";
 import AddNewKorisnikModal from "./components/Modals/addnewkorisnikmodals/AddNewKorisnik";
+
 import DeleteModal from "./components/DeleteModal";
+import EditNewKorisnikModal from "./components/Modals/addnewkorisnikmodals/EditNewKorisnikModal";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -25,6 +27,7 @@ const Users = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedKorisnik, setSelectedKorisnik] = useState<any>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
@@ -52,6 +55,16 @@ const Users = () => {
 
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
+  };
+
+  const handleEditModalOpen = (korisnik: any) => {
+    setSelectedKorisnik(korisnik);
+    setShowEditModal(true);
+  };
+
+  const handleEditModalClose = () => {
+    setShowEditModal(false);
+    fetchKorisnici();
   };
 
   const handleModalClose = () => {
@@ -131,7 +144,7 @@ const Users = () => {
         <div style={{ height: 20 }} />
         <CustomTable
           rows={data}
-          onEdit={() => console.log("Edit")}
+          onEdit={handleEditModalOpen}
           onDelete={handleDeleteModalOpen}
         />
       </StyledContainer>
@@ -139,6 +152,11 @@ const Users = () => {
         isOpen={showAddModal}
         onClose={handleModalClose}
         onCreate={handleAddKorisnikModal}
+      />
+      <EditNewKorisnikModal
+        isOpen={showEditModal}
+        onClose={handleEditModalClose}
+        korisnik={selectedKorisnik}
       />
       <DeleteModal
         isOpen={showDeleteModal}

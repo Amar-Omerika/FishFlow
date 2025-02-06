@@ -15,6 +15,13 @@ type NewKorisnikData = {
   AdresaStanovanja: string;
   SekcijaID: number;
 };
+type NewKorisnikDataUpdate = {
+  KorisnikID: number;
+  ImePrezime: string;
+  JMBG: string;
+  AdresaStanovanja: string;
+  SekcijaID: number;
+};
 
 type View = "CPU" | "RAM" | "STORAGE";
 
@@ -27,6 +34,7 @@ type EventPayloadMapping = {
   fetchSekcije: any;
   addKorisnici: any;
   deleteKorisnik: any;
+  updateKorisnik: any;
   changeView: View;
   sendFrameAction: FrameWindowAction;
 };
@@ -43,6 +51,7 @@ interface Window {
     fetchSekcije: () => Promise<any>;
     addKorisnici: (korisnik: NewKorisnikData) => void;
     deleteKorisnik: (KorisnikID: number) => Promise<number>;
+    updateKorisnik: (korisnik: NewKorisnikDataUpdate) => Promise<number>;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;
