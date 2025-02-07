@@ -65,12 +65,14 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
     }));
   };
 
-  const handleChangeSection = (event: any) => {
+  const handleChangeSection = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const selectedValue = event.target.value as string;
     setKorisnikInfo((prevState: any) => ({
       ...prevState,
-      sekcijaID: event.target.value as string,
+      SekcijaID: selectedValue,
     }));
-    console.log(korisnikInfo);
   };
 
   const handleUpdate = async () => {
