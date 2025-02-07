@@ -9,6 +9,7 @@ import {
   deleteKorisnik,
   fetchSekcije,
   updateKorisnik,
+  fetchAllKorisnikGodine,
   initDatabase,
 } from "./database.js";
 
@@ -60,5 +61,9 @@ app.on("ready", async () => {
       AdresaStanovanja,
       SekcijaID
     );
+  });
+
+  ipcMainHandle("fetchAllKorisnikGodine", async () => {
+    return await fetchAllKorisnikGodine();
   });
 });

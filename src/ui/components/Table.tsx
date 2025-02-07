@@ -39,7 +39,7 @@ export default function CustomTable({
   onEdit: (row: Record<string, any>) => void;
   onDelete: (row: Record<string, any>) => void;
 }) {
-  const excludedKeys = ["SekcijaID", "KorisnikID"];
+  const excludedKeys = ["SekcijaID", "KorisnikID", "KorisnikGodineID"];
 
   const allKeys = Array.from(new Set(rows.flatMap(Object.keys))).filter(
     (key) => !excludedKeys.includes(key)
@@ -51,18 +51,43 @@ export default function CustomTable({
         <TableHead>
           <TableRow>
             {allKeys.map((key) => (
-              <StyledTableCell key={key}>{key}</StyledTableCell>
+              <StyledTableCell
+                key={key}
+                align="center"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {key}
+              </StyledTableCell>
             ))}
-            <StyledTableCell key="actions">Uredi / Obrisi</StyledTableCell>{" "}
+            <StyledTableCell
+              key="actions"
+              align="center"
+              style={{
+                whiteSpace: "nowrap",
+                textAlign: "center",
+              }}
+            >
+              Uredi / Obrisi
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row, rowIndex) => (
             <StyledTableRow key={rowIndex}>
               {allKeys.map((key) => (
-                <StyledTableCell key={key}>{row[key] || "-"}</StyledTableCell>
+                <StyledTableCell
+                  style={{ whiteSpace: "nowrap", textAlign: "center" }}
+                  key={key}
+                >
+                  {row[key] && row[key].length > 20
+                    ? `${row[key].slice(0, 20)}...`
+                    : row[key] || "-"}
+                </StyledTableCell>
               ))}
-              <StyledTableCell key="actions">
+              <StyledTableCell
+                key="actions"
+                style={{ whiteSpace: "nowrap", textAlign: "center" }}
+              >
                 <IconButton aria-label="edit" onClick={() => onEdit(row)}>
                   <EditIcon />
                 </IconButton>

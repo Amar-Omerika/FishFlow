@@ -107,3 +107,27 @@ export async function fetchSekcije() {
   `);
   return sekcije;
 }
+
+//korisnik godine data
+export async function fetchAllKorisnikGodine() {
+  const db = await initDatabase();
+  const korisnikGodine = await db.all(`
+    SELECT 
+      KorisnikGodine.*, 
+      Korisnici.ImePrezime, 
+      Korisnici.JMBG, 
+      Korisnici.AdresaStanovanja, 
+      Sekcije.NazivSekcije 
+    FROM 
+      KorisnikGodine 
+    JOIN 
+      Korisnici 
+    ON 
+      KorisnikGodine.KorisnikID = Korisnici.KorisnikID 
+    JOIN 
+      Sekcije 
+    ON 
+      Korisnici.SekcijaID = Sekcije.SekcijaID
+  `);
+  return korisnikGodine;
+}

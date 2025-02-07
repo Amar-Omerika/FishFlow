@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -25,11 +25,22 @@ const StyledContainer = styled(Container)({
 });
 
 const Home = () => {
+  const [data, setData] = useState<any[]>([]);
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const fetchKorisnikGodine = async () => {
+    const data = await window.electron.fetchAllKorisnikGodine();
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchKorisnikGodine();
+  }, []);
+
+  console.log(data);
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
   };
@@ -39,7 +50,10 @@ const Home = () => {
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
   };
-
+  const handleModalClose = () => {
+    setShowAddModal(false);
+    fetchKorisnikGodine();
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
@@ -105,11 +119,15 @@ const Home = () => {
           </Button>
         </Container>
         <div style={{ height: 20 }} />
-        <CustomTable headerData={TableHeadData} />
+        <CustomTable
+          rows={data}
+          onEdit={() => console.log("Edit")}
+          onDelete={() => console.log("Delete")}
+        />
       </StyledContainer>
       <AddKorisnikModal
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+        onClose={() => handleModalClose}
         onCreate={handleAddKorisnikModal}
       />
       <ToastContainer />
