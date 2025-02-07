@@ -113,11 +113,11 @@ export async function fetchAllKorisnikGodine() {
   const db = await initDatabase();
   const korisnikGodine = await db.all(`
     SELECT 
-      KorisnikGodine.*, 
       Korisnici.ImePrezime, 
       Korisnici.JMBG, 
       Korisnici.AdresaStanovanja, 
-      Sekcije.NazivSekcije 
+      Sekcije.NazivSekcije ,
+      KorisnikGodine.*
     FROM 
       KorisnikGodine 
     JOIN 
