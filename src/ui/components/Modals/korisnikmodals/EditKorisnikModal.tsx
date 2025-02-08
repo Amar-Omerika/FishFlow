@@ -207,6 +207,8 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       value={korisnikGodineInfo?.Status}
                       onChange={handleChange}
                       fullWidth
+                      multiline
+                      maxRows={3}
                     />
                     <TextField
                       label="Napomena"
@@ -215,7 +217,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       onChange={handleChange}
                       fullWidth
                       multiline
-                      rows={4}
+                      maxRows={3}
                     />
                     <TextField
                       label="Prijava"
@@ -223,6 +225,8 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       value={korisnikGodineInfo?.Prijava}
                       onChange={handleChange}
                       fullWidth
+                      multiline
+                      maxRows={3}
                     />
                     <Box
                       sx={{

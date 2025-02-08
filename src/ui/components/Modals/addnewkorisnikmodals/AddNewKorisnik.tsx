@@ -135,6 +135,8 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     value={korisnikInfo.adresaStanovanja}
                     onChange={handleChange}
                     fullWidth
+                    multiline
+                    maxRows={3}
                   />
                   <FormControl variant="outlined" sx={{ minWidth: 200 }}>
                     <InputLabel id="section-label">Sekcija</InputLabel>
