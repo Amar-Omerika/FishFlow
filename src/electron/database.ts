@@ -163,3 +163,31 @@ export async function deleteKorisnikGodine(KorisnikGodineID: number) {
   );
   return result.changes;
 }
+export async function updateKorisnikGodine(
+  KorisnikGodineID: number,
+  Godina: number,
+  KorisnikID: number,
+  BrojRegistra: string,
+  KontaktTelefon: string,
+  IznosKM: number,
+  Status: string,
+  Napomena: string,
+  Prijava: string
+) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `UPDATE KorisnikGodine SET Godina = ?, KorisnikID = ?, BrojRegistra = ?, KontaktTelefon = ?, IznosKM = ?, Status = ?, Napomena = ?, Prijava = ? WHERE KorisnikGodineID = ?`,
+    [
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava,
+      KorisnikGodineID,
+    ]
+  );
+  return result.changes;
+}

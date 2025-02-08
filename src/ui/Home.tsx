@@ -16,9 +16,10 @@ import dayjs, { Dayjs } from "dayjs";
 import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
-import AddKorisnikModal from "./components/Modals/addkorisnikmodals/AddKorisnikModal";
+import AddKorisnikModal from "./components/Modals/korisnikmodals/AddKorisnikModal";
 import DeleteModal from "./components/DeleteModal";
 import { ToastContainer } from "react-toastify";
+import EditKorisnikGodine from "./components/Modals/korisnikmodals/EditKorisnikModal";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -32,6 +33,7 @@ const Home = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showAddKorisnikGodinaModal, setShowAddKorisnikGodinaModal] =
     useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedKorisnikGodine, setSelectedKorisnikGodine] =
     useState<any>(null);
@@ -60,7 +62,13 @@ const Home = () => {
   const handleModalClose = () => {
     setShowAddModal(false);
     setShowAddKorisnikGodinaModal(false);
+    setShowEditModal(false);
     fetchKorisnikGodine();
+  };
+
+  const handleEditModalOpen = (korisnikGodine: any) => {
+    setSelectedKorisnikGodine(korisnikGodine);
+    setShowEditModal(true);
   };
 
   const handleDeleteModalOpen = (korisnikGodine: any) => {
@@ -81,6 +89,7 @@ const Home = () => {
       setShowDeleteModal(false);
     }
   };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
@@ -95,7 +104,7 @@ const Home = () => {
             }}
             onClick={handleAddKorisnikGodinaModal}
           >
-            Dodaj Korisnik
+            Dodaj Korisnik Godina
           </Button>
         </div>
         <Container
@@ -150,7 +159,7 @@ const Home = () => {
         <div style={{ height: 20 }} />
         <CustomTable
           rows={data}
-          onEdit={() => console.log("Edit")}
+          onEdit={handleEditModalOpen}
           onDelete={handleDeleteModalOpen}
         />
       </StyledContainer>
@@ -159,12 +168,17 @@ const Home = () => {
         onClose={handleModalClose}
         onCreate={fetchKorisnikGodine}
       />
+      <EditKorisnikGodine
+        isOpen={showEditModal}
+        onClose={handleModalClose}
+        korisnikGodine={selectedKorisnikGodine}
+      />
       <DeleteModal
         isOpen={showDeleteModal}
         onClose={handleDeleteModalClose}
         onDelete={handleDelete}
-        title="Obrisi Korisnika"
-        content="Da li ste sigurni da zelite obrisati ovoga korisnika ?"
+        title="Obrisi Korisnik Godina"
+        content="Da li ste sigurni da zelite obrisati ovoga korisnika godine?"
       />
       <ToastContainer />
     </LocalizationProvider>

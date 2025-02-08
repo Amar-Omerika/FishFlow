@@ -12,6 +12,7 @@ import {
   fetchAllKorisnikGodine,
   addKorisnikGodine,
   deleteKorisnikGodine,
+  updateKorisnikGodine,
   initDatabase,
 } from "./database.js";
 
@@ -93,5 +94,29 @@ app.on("ready", async () => {
   });
   ipcMainHandle("deleteKorisnikGodine", async (event, KorisnikGodineID) => {
     return await deleteKorisnikGodine(KorisnikGodineID);
+  });
+  ipcMainHandle("updateKorisnikGodine", async (event, korisnikGodine) => {
+    const {
+      KorisnikGodineID,
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava,
+    } = korisnikGodine;
+    return await updateKorisnikGodine(
+      KorisnikGodineID,
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava
+    );
   });
 });

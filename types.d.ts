@@ -49,6 +49,7 @@ type EventPayloadMapping = {
   fetchAllKorisnikGodine: any;
   addKorisnikGodine: any;
   deleteKorisnikGodine: any;
+  updateKorisnikGodine: any;
   changeView: View;
   sendFrameAction: FrameWindowAction;
 };
@@ -69,6 +70,7 @@ interface Window {
     fetchAllKorisnikGodine: () => Promise<any>;
     addKorisnikGodine: (korisnikGodine: KorisnikGodinaData) => void;
     deleteKorisnikGodine: (KorisnikGodineID: number) => Promise<number>;
+    updateKorisnikGodine: (korisnikGodine: any) => Promise<number>;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;

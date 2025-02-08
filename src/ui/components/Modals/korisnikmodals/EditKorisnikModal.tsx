@@ -1,5 +1,4 @@
-// cSpell:words brojRegistra imePrezime adresaStanovanja kontaktTelefon sekcija jmbg iznos km napomena prijava uspijesno dodan dodavanju korisnika greska dodavanje korisnik korisniku korisnikom
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
@@ -10,49 +9,62 @@ import {
   Typography,
   Modal,
   Paper,
-  Autocomplete,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-interface AddKorisnikModalProps {
+
+interface EditKorisnikModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: () => void;
+  korisnikGodine: any;
 }
 
-const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
+const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
   isOpen,
   onClose,
-  onCreate,
+  korisnikGodine,
 }) => {
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
-  const [korisnikInfo, setKorisnikInfo] = useState({
-    brojRegistra: "",
-    iznosKM: "",
-    adresaStanovanja: "",
-    kontaktTelefon: "",
-    status: "",
-    napomena: "",
-    prijava: "",
-  });
+  const [korisnikGodineInfo, setKorisnikGodineInfo] = useState(korisnikGodine);
+
+  useEffect(() => {
+    if (korisnikGodine) {
+      setKorisnikGodineInfo(korisnikGodine);
+      setSelectedYear(dayjs().year(korisnikGodine.Godina));
+    }
+  }, [korisnikGodine]);
 
   const [errors, setErrors] = useState({
-    brojRegistra: "",
-    iznosKM: "",
-    adresaStanovanja: "",
-    kontaktTelefon: "",
-    status: "",
-    napomena: "",
-    prijava: "",
+    KorisnikID: "",
+    BrojRegistra: "",
+    KontaktTelefon: "",
+    IznosKM: "",
+    Status: "",
+    Napomena: "",
+    Prijava: "",
   });
+
+  const [korisnici, setKorisnici] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchKorisnici = async () => {
+      const data = await window.electron.fetchAllKorisnici();
+      setKorisnici(data);
+    };
+    fetchKorisnici();
+  }, []);
 
   if (!isOpen) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setKorisnikInfo((prevState) => ({
+    setKorisnikGodineInfo((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -62,18 +74,47 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     }));
   };
 
-  const handleCreate = async () => {
+  const handleChangeKorisnik = (event: any) => {
+    setKorisnikGodineInfo((prevState: any) => ({
+      ...prevState,
+      KorisnikID: event.target.value as string,
+    }));
+  };
+
+  const handleUpdate = async () => {
     try {
-      toast.success("Korisnik uspijesno dodan");
-      onCreate();
+      const {
+        KorisnikGodineID,
+        KorisnikID,
+        BrojRegistra,
+        KontaktTelefon,
+        IznosKM,
+        Status,
+        Napomena,
+        Prijava,
+      } = korisnikGodineInfo;
+      await window.electron.updateKorisnikGodine({
+        KorisnikGodineID,
+        Godina: selectedYear?.year() || 0,
+        KorisnikID: parseInt(KorisnikID),
+        BrojRegistra,
+        KontaktTelefon,
+        IznosKM: parseFloat(IznosKM),
+        Status,
+        Napomena,
+        Prijava,
+      });
+      toast.success("Korisnik Godina uspijesno azuriran");
       onClose();
     } catch (error) {
-      toast.error("Greska pri dodavanju korisnika");
+      toast.error("Greska pri azuriranju korisnika godine");
     }
   };
+
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
   };
+
   return ReactDOM.createPortal(
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <AnimatePresence>
@@ -99,7 +140,7 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
               >
                 <Paper sx={{ p: 4, borderRadius: 2 }}>
                   <Typography variant="h6" gutterBottom>
-                    Uredi Korisnika
+                    Uredi Korisnik Godina
                   </Typography>
                   <Box component="form" sx={{ display: "grid", gap: 2 }}>
                     <DatePicker
@@ -110,64 +151,67 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                       slots={{ textField: TextField }}
                       slotProps={{
                         textField: {
-                          // Props for the TextField
-                          variant: "outlined", // Or whatever variant you want
-                          // ... any other TextField props
+                          variant: "outlined",
                         },
                       }}
                     />
-                    <Autocomplete
-                      disablePortal
-                      options={[
-                        { label: "Saudin Guja", id: 1 },
-                        { label: "Mujo Mujkovic", id: 2 },
-                      ]}
-                      sx={{ width: 300 }}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Korisnik" />
-                      )}
-                    />
+                    <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+                      <InputLabel id="korisnik-label">Korisnik</InputLabel>
+                      <Select
+                        labelId="korisnik-label"
+                        id="korisnik-select"
+                        disabled
+                        value={korisnikGodineInfo?.KorisnikID}
+                        onChange={handleChangeKorisnik as any}
+                        label="Korisnik"
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        {korisnici &&
+                          korisnici.map((korisnik) => (
+                            <MenuItem
+                              key={korisnik?.KorisnikID}
+                              value={korisnik?.KorisnikID}
+                            >
+                              {korisnik?.ImePrezime}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
                     <TextField
                       label="Broj Registra"
-                      name="brojRegistra"
-                      value={korisnikInfo.brojRegistra}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-
-                    <TextField
-                      label="Iznos KM"
-                      name="iznosKM"
-                      value={korisnikInfo.iznosKM}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Adresa Stanovanja"
-                      name="adresaStanovanja"
-                      value={korisnikInfo.adresaStanovanja}
+                      name="BrojRegistra"
+                      multiline
+                      value={korisnikGodineInfo?.BrojRegistra}
                       onChange={handleChange}
                       fullWidth
                     />
                     <TextField
                       label="Kontakt Telefon"
-                      name="kontaktTelefon"
-                      value={korisnikInfo.kontaktTelefon}
+                      name="KontaktTelefon"
+                      value={korisnikGodineInfo?.KontaktTelefon}
                       onChange={handleChange}
                       fullWidth
                     />
-
+                    <TextField
+                      label="Iznos KM"
+                      name="IznosKM"
+                      value={korisnikGodineInfo?.IznosKM}
+                      onChange={handleChange}
+                      fullWidth
+                    />
                     <TextField
                       label="Status"
-                      name="status"
-                      value={korisnikInfo.status}
+                      name="Status"
+                      value={korisnikGodineInfo?.Status}
                       onChange={handleChange}
                       fullWidth
                     />
                     <TextField
                       label="Napomena"
-                      name="napomena"
-                      value={korisnikInfo.napomena}
+                      name="Napomena"
+                      value={korisnikGodineInfo?.Napomena}
                       onChange={handleChange}
                       fullWidth
                       multiline
@@ -175,8 +219,8 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     />
                     <TextField
                       label="Prijava"
-                      name="prijava"
-                      value={korisnikInfo.prijava}
+                      name="Prijava"
+                      value={korisnikGodineInfo?.Prijava}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -190,8 +234,8 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                       <Button onClick={onClose} sx={{ mr: 2 }}>
                         Prekini
                       </Button>
-                      <Button variant="contained" onClick={handleCreate}>
-                        Dodaj
+                      <Button variant="contained" onClick={handleUpdate}>
+                        Azuriraj
                       </Button>
                     </Box>
                   </Box>
@@ -206,4 +250,4 @@ const EditKorisnikModal: React.FC<AddKorisnikModalProps> = ({
   );
 };
 
-export default EditKorisnikModal;
+export default EditKorisnikGodine;
