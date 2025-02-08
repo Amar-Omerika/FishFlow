@@ -19,6 +19,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
   fetchAllKorisnikGodine: () => ipcInvoke("fetchAllKorisnikGodine"),
   addKorisnikGodine: (korisnikGodine: any) =>
     ipcInvoke("addKorisnikGodine", korisnikGodine),
+  deleteKorisnikGodine: (KorisnikGodineID: number) =>
+    ipcInvoke("deleteKorisnikGodine", KorisnikGodineID),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
 } satisfies Window["electron"]);
 

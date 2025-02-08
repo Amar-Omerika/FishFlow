@@ -11,6 +11,7 @@ import {
   updateKorisnik,
   fetchAllKorisnikGodine,
   addKorisnikGodine,
+  deleteKorisnikGodine,
   initDatabase,
 } from "./database.js";
 
@@ -89,5 +90,8 @@ app.on("ready", async () => {
       Napomena,
       Prijava
     );
+  });
+  ipcMainHandle("deleteKorisnikGodine", async (event, KorisnikGodineID) => {
+    return await deleteKorisnikGodine(KorisnikGodineID);
   });
 });

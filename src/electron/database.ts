@@ -3,14 +3,12 @@ import { app } from "electron";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
-// Inicijalizacija SQLite baze
 export async function initDatabase() {
   const db = await open({
     filename: path.join(app.getPath("home"), "database.sqlite"),
     driver: sqlite3.Database,
   });
 
-  // Kreiranje tabela
   await db.exec(`
     CREATE TABLE IF NOT EXISTS Sekcije (
       SekcijaID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -108,7 +106,6 @@ export async function fetchSekcije() {
   return sekcije;
 }
 
-//korisnik godine data
 export async function fetchAllKorisnikGodine() {
   const db = await initDatabase();
   const korisnikGodine = await db.all(`
@@ -157,4 +154,12 @@ export async function addKorisnikGodine(
     ]
   );
   return result.lastID;
+}
+export async function deleteKorisnikGodine(KorisnikGodineID: number) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `DELETE FROM KorisnikGodine WHERE KorisnikGodineID = ?`,
+    [KorisnikGodineID]
+  );
+  return result.changes;
 }

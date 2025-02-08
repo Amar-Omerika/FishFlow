@@ -17,6 +17,7 @@ import { styled } from "@mui/system";
 import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import AddKorisnikModal from "./components/Modals/addkorisnikmodals/AddKorisnikModal";
+import DeleteModal from "./components/DeleteModal";
 import { ToastContainer } from "react-toastify";
 
 const StyledContainer = styled(Container)({
@@ -31,6 +32,9 @@ const Home = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showAddKorisnikGodinaModal, setShowAddKorisnikGodinaModal] =
     useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedKorisnikGodine, setSelectedKorisnikGodine] =
+    useState<any>(null);
 
   const fetchKorisnikGodine = async () => {
     const data = await window.electron.fetchAllKorisnikGodine();
@@ -59,6 +63,24 @@ const Home = () => {
     fetchKorisnikGodine();
   };
 
+  const handleDeleteModalOpen = (korisnikGodine: any) => {
+    setSelectedKorisnikGodine(korisnikGodine);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setShowDeleteModal(false);
+  };
+
+  const handleDelete = async () => {
+    if (selectedKorisnikGodine) {
+      await window.electron.deleteKorisnikGodine(
+        selectedKorisnikGodine.KorisnikGodineID
+      );
+      fetchKorisnikGodine();
+      setShowDeleteModal(false);
+    }
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
@@ -129,13 +151,20 @@ const Home = () => {
         <CustomTable
           rows={data}
           onEdit={() => console.log("Edit")}
-          onDelete={() => console.log("Delete")}
+          onDelete={handleDeleteModalOpen}
         />
       </StyledContainer>
       <AddKorisnikModal
         isOpen={showAddKorisnikGodinaModal}
         onClose={handleModalClose}
         onCreate={fetchKorisnikGodine}
+      />
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteModalClose}
+        onDelete={handleDelete}
+        title="Obrisi Korisnika"
+        content="Da li ste sigurni da zelite obrisati ovoga korisnika ?"
       />
       <ToastContainer />
     </LocalizationProvider>
