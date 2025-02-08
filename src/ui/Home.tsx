@@ -18,7 +18,6 @@ import { COLORS } from "../ui/constants/constants";
 import CustomTable from "./components/Table";
 import AddKorisnikModal from "./components/Modals/addkorisnikmodals/AddKorisnikModal";
 import { ToastContainer } from "react-toastify";
-import { TableHeadData } from "./placeholderData";
 
 const StyledContainer = styled(Container)({
   padding: "5px",
@@ -30,6 +29,8 @@ const Home = () => {
   const [imePrezime, setImePrezime] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddKorisnikGodinaModal, setShowAddKorisnikGodinaModal] =
+    useState(false);
 
   const fetchKorisnikGodine = async () => {
     const data = await window.electron.fetchAllKorisnikGodine();
@@ -40,7 +41,6 @@ const Home = () => {
     fetchKorisnikGodine();
   }, []);
 
-  console.log(data);
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
   };
@@ -50,10 +50,15 @@ const Home = () => {
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
   };
+  const handleAddKorisnikGodinaModal = () => {
+    setShowAddKorisnikGodinaModal(true);
+  };
   const handleModalClose = () => {
     setShowAddModal(false);
+    setShowAddKorisnikGodinaModal(false);
     fetchKorisnikGodine();
   };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
@@ -61,10 +66,14 @@ const Home = () => {
           style={{ display: "flex", justifyContent: "end", marginTop: "10px" }}
         >
           <Button
-            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
-            onClick={handleAddKorisnikModal}
+            style={{
+              backgroundColor: COLORS.primary,
+              color: "#fff",
+              marginLeft: "10px",
+            }}
+            onClick={handleAddKorisnikGodinaModal}
           >
-            Dodaj Korisnika
+            Dodaj Korisnik
           </Button>
         </div>
         <Container
@@ -108,9 +117,7 @@ const Home = () => {
             slots={{ textField: TextField }}
             slotProps={{
               textField: {
-                // Props for the TextField
-                variant: "outlined", // Or whatever variant you want
-                // ... any other TextField props
+                variant: "outlined",
               },
             }}
           />
@@ -126,9 +133,9 @@ const Home = () => {
         />
       </StyledContainer>
       <AddKorisnikModal
-        isOpen={showAddModal}
-        onClose={() => handleModalClose}
-        onCreate={handleAddKorisnikModal}
+        isOpen={showAddKorisnikGodinaModal}
+        onClose={handleModalClose}
+        onCreate={fetchKorisnikGodine}
       />
       <ToastContainer />
     </LocalizationProvider>

@@ -10,6 +10,7 @@ import {
   fetchSekcije,
   updateKorisnik,
   fetchAllKorisnikGodine,
+  addKorisnikGodine,
   initDatabase,
 } from "./database.js";
 
@@ -65,5 +66,28 @@ app.on("ready", async () => {
 
   ipcMainHandle("fetchAllKorisnikGodine", async () => {
     return await fetchAllKorisnikGodine();
+  });
+
+  ipcMainHandle("addKorisnikGodine", async (event, korisnikGodine) => {
+    const {
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava,
+    } = korisnikGodine;
+    return await addKorisnikGodine(
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava
+    );
   });
 });

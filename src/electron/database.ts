@@ -131,3 +131,30 @@ export async function fetchAllKorisnikGodine() {
   `);
   return korisnikGodine;
 }
+
+export async function addKorisnikGodine(
+  Godina: number,
+  KorisnikID: number,
+  BrojRegistra: string,
+  KontaktTelefon: string,
+  IznosKM: number,
+  Status: string,
+  Napomena: string,
+  Prijava: string
+) {
+  const db = await initDatabase();
+  const result = await db.run(
+    `INSERT INTO KorisnikGodine (Godina, KorisnikID, BrojRegistra, KontaktTelefon, IznosKM, Status, Napomena, Prijava) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      Godina,
+      KorisnikID,
+      BrojRegistra,
+      KontaktTelefon,
+      IznosKM,
+      Status,
+      Napomena,
+      Prijava,
+    ]
+  );
+  return result.lastID;
+}
