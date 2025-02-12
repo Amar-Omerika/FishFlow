@@ -12,13 +12,15 @@ electron.contextBridge.exposeInMainWorld("electron", {
   getStaticData: () => ipcInvoke("getStaticData"),
   fetchAllKorisnici: (filters: any, limit: number, offset: number) =>
     ipcInvoke("fetchAllKorisnici", filters, limit, offset),
+  fetchAllKorisniciWithoutFilters: () =>
+    ipcInvoke("fetchAllKorisniciWithoutFilters"),
   addKorisnici: (korisnik: any) => ipcInvoke("addKorisnici", korisnik),
   deleteKorisnik: (KorisnikID: number) =>
     ipcInvoke("deleteKorisnik", KorisnikID),
   updateKorisnik: (korisnik: any) => ipcInvoke("updateKorisnik", korisnik),
   fetchSekcije: () => ipcInvoke("fetchSekcije"),
-  fetchAllKorisnikGodine: (filters: any) =>
-    ipcInvoke("fetchAllKorisnikGodine", filters),
+  fetchAllKorisnikGodine: (filters: any, limit: number, offset: number) =>
+    ipcInvoke("fetchAllKorisnikGodine", filters, limit, offset),
   addKorisnikGodine: (korisnikGodine: any) =>
     ipcInvoke("addKorisnikGodine", korisnikGodine),
   deleteKorisnikGodine: (KorisnikGodineID: number) =>
@@ -32,6 +34,7 @@ electron.contextBridge.exposeInMainWorld("electron", {
 // the main process and expects a response. It returns a promise that resolves with the
 //  result from the main process. It's useful when you need to perform an action and wait
 //  for a result
+
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
   key: Key,
   ...args: any[]

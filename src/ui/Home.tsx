@@ -7,6 +7,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Pagination,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -38,17 +39,34 @@ const Home = () => {
   const [selectedKorisnikGodine, setSelectedKorisnikGodine] =
     useState<any>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const limit = 5;
 
-  const fetchKorisnikGodine = async (filters = {}) => {
-    const data = await window.electron.fetchAllKorisnikGodine(filters);
-    setData(data);
+  const fetchKorisnikGodine = async (
+    filters: any = {},
+    limit: number = 5,
+    offset: number = 0
+  ) => {
+    const result = await window.electron.fetchAllKorisnikGodine(
+      filters,
+      limit,
+      offset
+    );
+    setData(result.korisnikGodine);
+    const totalCount = result.totalCount || 0;
+    setTotalPages(Math.ceil(totalCount / limit));
   };
 
   useEffect(() => {
-    const filters = {
-      godina: selectedYear?.year(),
-    };
-    fetchKorisnikGodine(filters);
+    fetchKorisnikGodine(
+      { sekcija: section, godina: selectedYear?.year(), imePrezime },
+      limit,
+      (page - 1) * limit
+    );
+  }, [page]);
+
+  useEffect(() => {
     const fetchSekcije = async () => {
       const data = await window.electron.fetchSekcije();
       setSekcije(data);
@@ -59,6 +77,7 @@ const Home = () => {
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     setSection(event.target.value as string);
   };
+
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
   };
@@ -66,11 +85,16 @@ const Home = () => {
   const handleAddKorisnikGodinaModal = () => {
     setShowAddKorisnikGodinaModal(true);
   };
+
   const handleModalClose = () => {
     setShowAddModal(false);
     setShowAddKorisnikGodinaModal(false);
     setShowEditModal(false);
-    fetchKorisnikGodine();
+    fetchKorisnikGodine(
+      { sekcija: section, godina: selectedYear?.year(), imePrezime },
+      limit,
+      (page - 1) * limit
+    );
   };
 
   const handleEditModalOpen = (korisnikGodine: any) => {
@@ -92,7 +116,11 @@ const Home = () => {
       await window.electron.deleteKorisnikGodine(
         selectedKorisnikGodine.KorisnikGodineID
       );
-      fetchKorisnikGodine();
+      fetchKorisnikGodine(
+        { sekcija: section, godina: selectedYear?.year(), imePrezime },
+        limit,
+        (page - 1) * limit
+      );
       setShowDeleteModal(false);
     }
   };
@@ -103,7 +131,12 @@ const Home = () => {
       godina: selectedYear?.year(),
       imePrezime,
     };
-    fetchKorisnikGodine(filters);
+    setPage(1);
+    fetchKorisnikGodine(filters, limit, 0);
+  };
+
+  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -182,6 +215,11 @@ const Home = () => {
           rows={data}
           onEdit={handleEditModalOpen}
           onDelete={handleDeleteModalOpen}
+        />
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
         />
       </StyledContainer>
       <AddKorisnikModal

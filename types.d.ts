@@ -42,6 +42,7 @@ type EventPayloadMapping = {
   statistics: Statistics;
   getStaticData: StaticData;
   fetchAllKorisnici: any;
+  fetchAllKorisniciWithoutFilters: any;
   fetchSekcije: any;
   addKorisnici: any;
   deleteKorisnik: any;
@@ -67,11 +68,16 @@ interface Window {
       limit: number,
       offset: number
     ) => Promise<any>;
+    fetchAllKorisniciWithoutFilters: () => Promise<any>;
     fetchSekcije: () => Promise<any>;
     addKorisnici: (korisnik: NewKorisnikData) => void;
     deleteKorisnik: (KorisnikID: number) => Promise<number>;
     updateKorisnik: (korisnik: NewKorisnikDataUpdate) => Promise<number>;
-    fetchAllKorisnikGodine: (filters: any) => Promise<any>;
+    fetchAllKorisnikGodine: (
+      filters: any,
+      limit: number,
+      offset: number
+    ) => Promise<any>;
     addKorisnikGodine: (korisnikGodine: KorisnikGodinaData) => void;
     deleteKorisnikGodine: (KorisnikGodineID: number) => Promise<number>;
     updateKorisnikGodine: (korisnikGodine: any) => Promise<number>;

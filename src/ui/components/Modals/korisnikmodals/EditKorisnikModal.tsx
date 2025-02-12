@@ -54,7 +54,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
 
   useEffect(() => {
     const fetchKorisnici = async () => {
-      const data = await window.electron.fetchAllKorisnici();
+      const data = await window.electron.fetchAllKorisniciWithoutFilters();
       setKorisnici(data);
     };
     fetchKorisnici();

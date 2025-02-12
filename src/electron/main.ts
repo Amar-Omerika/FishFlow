@@ -13,6 +13,7 @@ import {
   addKorisnikGodine,
   deleteKorisnikGodine,
   updateKorisnikGodine,
+  fetchAllKorisniciWithoutFilters,
   initDatabase,
 } from "./database.js";
 
@@ -41,7 +42,9 @@ app.on("ready", async () => {
     const result = await fetchAllKorisnici(filters, limit, offset);
     return result;
   });
-
+  ipcMainHandle("fetchAllKorisniciWithoutFilters", async () => {
+    return await fetchAllKorisniciWithoutFilters();
+  });
   ipcMainHandle("fetchSekcije", async () => {
     return await fetchSekcije();
   });
@@ -67,9 +70,12 @@ app.on("ready", async () => {
     );
   });
 
-  ipcMainHandle("fetchAllKorisnikGodine", async (event, filters) => {
-    return await fetchAllKorisnikGodine(filters);
-  });
+  ipcMainHandle(
+    "fetchAllKorisnikGodine",
+    async (event, filters, limit, offset) => {
+      return await fetchAllKorisnikGodine(filters, limit, offset);
+    }
+  );
 
   ipcMainHandle("addKorisnikGodine", async (event, korisnikGodine) => {
     const {

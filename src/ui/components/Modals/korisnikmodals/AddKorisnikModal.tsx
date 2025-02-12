@@ -55,7 +55,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
 
   useEffect(() => {
     const fetchKorisnici = async () => {
-      const data = await window.electron.fetchAllKorisnici();
+      const data = await window.electron.fetchAllKorisniciWithoutFilters();
       setKorisnici(data);
     };
     fetchKorisnici();
@@ -167,14 +167,15 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
-                        {korisnici.map((korisnik) => (
-                          <MenuItem
-                            key={korisnik.KorisnikID}
-                            value={korisnik.KorisnikID}
-                          >
-                            {korisnik.ImePrezime}
-                          </MenuItem>
-                        ))}
+                        {korisnici &&
+                          korisnici.map((korisnik) => (
+                            <MenuItem
+                              key={korisnik.KorisnikID}
+                              value={korisnik.KorisnikID}
+                            >
+                              {korisnik.ImePrezime}
+                            </MenuItem>
+                          ))}
                       </Select>
                     </FormControl>
                     <TextField

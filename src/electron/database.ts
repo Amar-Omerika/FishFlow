@@ -101,7 +101,24 @@ export async function fetchAllKorisnici(
 
   return { korisnici, totalCount };
 }
+export async function fetchAllKorisniciWithoutFilters() {
+  const db = await initDatabase();
 
+  const query = `
+    SELECT 
+      Korisnici.*, 
+      Sekcije.NazivSekcije 
+    FROM 
+      Korisnici 
+    JOIN 
+      Sekcije 
+    ON 
+      Korisnici.SekcijaID = Sekcije.SekcijaID
+  `;
+
+  const korisnici = await db.all(query);
+  return korisnici;
+}
 export async function addKorisnici(
   ImePrezime: string,
   JMBG: string,
@@ -151,7 +168,11 @@ export async function fetchSekcije() {
   return sekcije;
 }
 
-export async function fetchAllKorisnikGodine(filters: any = {}) {
+export async function fetchAllKorisnikGodine(
+  filters: any = {},
+  limit: number = 5,
+  offset: number = 0
+) {
   const db = await initDatabase();
   const { sekcija, godina, imePrezime } = filters;
 
@@ -175,24 +196,54 @@ export async function fetchAllKorisnikGodine(filters: any = {}) {
     WHERE 1=1
   `;
 
+  let countQuery = `
+    SELECT 
+      COUNT(*) as totalCount
+    FROM 
+      KorisnikGodine 
+    JOIN 
+      Korisnici 
+    ON 
+      KorisnikGodine.KorisnikID = Korisnici.KorisnikID 
+    JOIN 
+      Sekcije 
+    ON 
+      Korisnici.SekcijaID = Sekcije.SekcijaID
+    WHERE 1=1
+  `;
+
   const params: any[] = [];
+  const countParams: any[] = [];
 
   if (sekcija) {
     query += ` AND Sekcije.NazivSekcije = ?`;
+    countQuery += ` AND Sekcije.NazivSekcije = ?`;
     params.push(sekcija);
+    countParams.push(sekcija);
   }
 
   if (godina) {
     query += ` AND KorisnikGodine.Godina = ?`;
+    countQuery += ` AND KorisnikGodine.Godina = ?`;
     params.push(godina);
+    countParams.push(godina);
   }
 
   if (imePrezime) {
     query += ` AND Korisnici.ImePrezime LIKE ?`;
+    countQuery += ` AND Korisnici.ImePrezime LIKE ?`;
     params.push(`%${imePrezime}%`);
+    countParams.push(`%${imePrezime}%`);
   }
+
+  query += ` LIMIT ? OFFSET ?`;
+  params.push(limit, offset);
+
   const korisnikGodine = await db.all(query, params);
-  return korisnikGodine;
+  const totalCountResult = await db.get(countQuery, countParams);
+  const totalCount = totalCountResult.totalCount;
+
+  return { korisnikGodine, totalCount };
 }
 
 export async function addKorisnikGodine(
