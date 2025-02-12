@@ -41,9 +41,11 @@ export async function initDatabase() {
   return db;
 }
 
-export async function fetchAllKorisnici() {
+export async function fetchAllKorisnici(filters: any = {}) {
   const db = await initDatabase();
-  const korisnici = await db.all(`
+  const { sekcija, imePrezime } = filters;
+
+  let query = `
     SELECT 
       Korisnici.*, 
       Sekcije.NazivSekcije 
@@ -53,7 +55,22 @@ export async function fetchAllKorisnici() {
       Sekcije 
     ON 
       Korisnici.SekcijaID = Sekcije.SekcijaID
-  `);
+    WHERE 1=1
+  `;
+
+  const params: any[] = [];
+
+  if (sekcija) {
+    query += ` AND Sekcije.SekcijaID = ?`;
+    params.push(sekcija);
+  }
+
+  if (imePrezime) {
+    query += ` AND Korisnici.ImePrezime LIKE ?`;
+    params.push(`%${imePrezime}%`);
+  }
+  console.log(params);
+  const korisnici = await db.all(query, params);
   return korisnici;
 }
 
@@ -146,7 +163,6 @@ export async function fetchAllKorisnikGodine(filters: any = {}) {
     query += ` AND Korisnici.ImePrezime LIKE ?`;
     params.push(`%${imePrezime}%`);
   }
-  console.log("aaa", params);
   const korisnikGodine = await db.all(query, params);
   return korisnikGodine;
 }

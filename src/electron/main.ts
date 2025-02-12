@@ -37,8 +37,8 @@ app.on("ready", async () => {
     return getStaticData();
   });
 
-  ipcMainHandle("fetchAllKorisnici", async () => {
-    return await fetchAllKorisnici();
+  ipcMainHandle("fetchAllKorisnici", async (event, filters) => {
+    return await fetchAllKorisnici(filters);
   });
 
   ipcMainHandle("fetchSekcije", async () => {

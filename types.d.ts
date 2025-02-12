@@ -62,7 +62,7 @@ interface Window {
       callback: (statistics: Statistics) => void
     ) => UnsubscribeFunction;
     getStaticData: () => Promise<StaticData>;
-    fetchAllKorisnici: () => Promise<any>;
+    fetchAllKorisnici: (filter: any) => Promise<any>;
     fetchSekcije: () => Promise<any>;
     addKorisnici: (korisnik: NewKorisnikData) => void;
     deleteKorisnik: (KorisnikID: number) => Promise<number>;

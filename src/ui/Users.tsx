@@ -32,8 +32,8 @@ const Users = () => {
   const [selectedKorisnik, setSelectedKorisnik] = useState<any>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
 
-  const fetchKorisnici = async () => {
-    const data = await window.electron.fetchAllKorisnici();
+  const fetchKorisnici = async (filters: any = {}) => {
+    const data = await window.electron.fetchAllKorisnici(filters);
     setData(data);
   };
 
@@ -64,18 +64,18 @@ const Users = () => {
 
   const handleEditModalClose = () => {
     setShowEditModal(false);
-    fetchKorisnici();
+    fetchKorisnici({ sekcija: section, imePrezime });
   };
 
   const handleModalClose = () => {
     setShowAddModal(false);
-    fetchKorisnici();
+    fetchKorisnici({ sekcija: section, imePrezime });
   };
 
   const handleDelete = async () => {
     if (selectedKorisnik) {
       await window.electron.deleteKorisnik(selectedKorisnik.KorisnikID);
-      fetchKorisnici();
+      fetchKorisnici({ sekcija: section, imePrezime });
       setShowDeleteModal(false);
     }
   };
@@ -87,6 +87,14 @@ const Users = () => {
 
   const handleDeleteModalClose = () => {
     setShowDeleteModal(false);
+  };
+
+  const handleSearch = () => {
+    const filters = {
+      sekcija: section,
+      imePrezime,
+    };
+    fetchKorisnici(filters);
   };
 
   return (
@@ -137,7 +145,10 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
-          <Button style={{ backgroundColor: COLORS.primary, color: "#fff" }}>
+          <Button
+            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
+            onClick={handleSearch}
+          >
             Pretrazi
           </Button>
         </Container>
