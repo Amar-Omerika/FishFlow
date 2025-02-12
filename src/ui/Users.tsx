@@ -7,6 +7,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Pagination,
 } from "@mui/material";
 
 import { styled } from "@mui/system";
@@ -31,15 +32,28 @@ const Users = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedKorisnik, setSelectedKorisnik] = useState<any>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const limit = 5;
 
-  const fetchKorisnici = async (filters: any = {}) => {
-    const data = await window.electron.fetchAllKorisnici(filters);
-    setData(data);
+  const fetchKorisnici = async (
+    filters: any = {},
+    limit: number = 5,
+    offset: number = 0
+  ) => {
+    const result = await window.electron.fetchAllKorisnici(
+      filters,
+      limit,
+      offset
+    );
+    setData(result.korisnici);
+    const totalCount = result.totalCount || 0;
+    setTotalPages(Math.ceil(totalCount / limit));
   };
 
   useEffect(() => {
-    fetchKorisnici();
-  }, []);
+    fetchKorisnici({ sekcija: section, imePrezime }, limit, (page - 1) * limit);
+  }, [page]);
 
   useEffect(() => {
     const fetchSekcije = async () => {
@@ -64,18 +78,22 @@ const Users = () => {
 
   const handleEditModalClose = () => {
     setShowEditModal(false);
-    fetchKorisnici({ sekcija: section, imePrezime });
+    fetchKorisnici({ sekcija: section, imePrezime }, limit, (page - 1) * limit);
   };
 
   const handleModalClose = () => {
     setShowAddModal(false);
-    fetchKorisnici({ sekcija: section, imePrezime });
+    fetchKorisnici({ sekcija: section, imePrezime }, limit, (page - 1) * limit);
   };
 
   const handleDelete = async () => {
     if (selectedKorisnik) {
       await window.electron.deleteKorisnik(selectedKorisnik.KorisnikID);
-      fetchKorisnici({ sekcija: section, imePrezime });
+      fetchKorisnici(
+        { sekcija: section, imePrezime },
+        limit,
+        (page - 1) * limit
+      );
       setShowDeleteModal(false);
     }
   };
@@ -94,7 +112,12 @@ const Users = () => {
       sekcija: section,
       imePrezime,
     };
-    fetchKorisnici(filters);
+    setPage(1);
+    fetchKorisnici(filters, limit, 0);
+  };
+
+  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -157,6 +180,11 @@ const Users = () => {
           rows={data}
           onEdit={handleEditModalOpen}
           onDelete={handleDeleteModalOpen}
+        />
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
         />
       </StyledContainer>
       <AddNewKorisnikModal

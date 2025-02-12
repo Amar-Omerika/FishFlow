@@ -41,7 +41,11 @@ export async function initDatabase() {
   return db;
 }
 
-export async function fetchAllKorisnici(filters: any = {}) {
+export async function fetchAllKorisnici(
+  filters: any = {},
+  limit: number = 5,
+  offset: number = 0
+) {
   const db = await initDatabase();
   const { sekcija, imePrezime } = filters;
 
@@ -58,20 +62,44 @@ export async function fetchAllKorisnici(filters: any = {}) {
     WHERE 1=1
   `;
 
+  let countQuery = `
+    SELECT 
+      COUNT(*) as totalCount
+    FROM 
+      Korisnici 
+    JOIN 
+      Sekcije 
+    ON 
+      Korisnici.SekcijaID = Sekcije.SekcijaID
+    WHERE 1=1
+  `;
+
   const params: any[] = [];
+  const countParams: any[] = [];
 
   if (sekcija) {
     query += ` AND Sekcije.SekcijaID = ?`;
+    countQuery += ` AND Sekcije.SekcijaID = ?`;
     params.push(sekcija);
+    countParams.push(sekcija);
   }
 
   if (imePrezime) {
     query += ` AND Korisnici.ImePrezime LIKE ?`;
+    countQuery += ` AND Korisnici.ImePrezime LIKE ?`;
     params.push(`%${imePrezime}%`);
+    countParams.push(`%${imePrezime}%`);
   }
+
+  query += ` LIMIT ? OFFSET ?`;
+  params.push(limit, offset);
+
   console.log(params);
   const korisnici = await db.all(query, params);
-  return korisnici;
+  const totalCountResult = await db.get(countQuery, countParams);
+  const totalCount = totalCountResult.totalCount;
+
+  return { korisnici, totalCount };
 }
 
 export async function addKorisnici(

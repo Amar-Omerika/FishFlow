@@ -10,7 +10,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
       callback(view);
     }),
   getStaticData: () => ipcInvoke("getStaticData"),
-  fetchAllKorisnici: (filters: any) => ipcInvoke("fetchAllKorisnici", filters),
+  fetchAllKorisnici: (filters: any, limit: number, offset: number) =>
+    ipcInvoke("fetchAllKorisnici", filters, limit, offset),
   addKorisnici: (korisnik: any) => ipcInvoke("addKorisnici", korisnik),
   deleteKorisnik: (KorisnikID: number) =>
     ipcInvoke("deleteKorisnik", KorisnikID),
