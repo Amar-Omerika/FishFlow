@@ -37,14 +37,23 @@ const Home = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedKorisnikGodine, setSelectedKorisnikGodine] =
     useState<any>(null);
+  const [sekcije, setSekcije] = useState<any[]>([]);
 
-  const fetchKorisnikGodine = async () => {
-    const data = await window.electron.fetchAllKorisnikGodine();
+  const fetchKorisnikGodine = async (filters = {}) => {
+    const data = await window.electron.fetchAllKorisnikGodine(filters);
     setData(data);
   };
 
   useEffect(() => {
-    fetchKorisnikGodine();
+    const filters = {
+      godina: selectedYear?.year(),
+    };
+    fetchKorisnikGodine(filters);
+    const fetchSekcije = async () => {
+      const data = await window.electron.fetchSekcije();
+      setSekcije(data);
+    };
+    fetchSekcije();
   }, []);
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
@@ -53,9 +62,7 @@ const Home = () => {
   const handleYearChange = (newValue: Dayjs | null) => {
     setSelectedYear(newValue);
   };
-  const handleAddKorisnikModal = () => {
-    setShowAddModal(true);
-  };
+
   const handleAddKorisnikGodinaModal = () => {
     setShowAddKorisnikGodinaModal(true);
   };
@@ -90,6 +97,15 @@ const Home = () => {
     }
   };
 
+  const handleSearch = () => {
+    const filters = {
+      sekcija: section,
+      godina: selectedYear?.year(),
+      imePrezime,
+    };
+    fetchKorisnikGodine(filters);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
@@ -104,7 +120,7 @@ const Home = () => {
             }}
             onClick={handleAddKorisnikGodinaModal}
           >
-            Dodaj Korisnik Godina
+            Dodaj Korisnika
           </Button>
         </div>
         <Container
@@ -135,9 +151,11 @@ const Home = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Stari - Grad</MenuItem>
-              <MenuItem value={20}>Fejiceva</MenuItem>
-              <MenuItem value={30}>Spanski Logor</MenuItem>
+              {sekcije.map((sekcija) => (
+                <MenuItem key={sekcija.SekcijaID} value={sekcija.NazivSekcije}>
+                  {sekcija.NazivSekcije}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <DatePicker
@@ -152,7 +170,10 @@ const Home = () => {
               },
             }}
           />
-          <Button style={{ backgroundColor: COLORS.primary, color: "#fff" }}>
+          <Button
+            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
+            onClick={handleSearch}
+          >
             Pretrazi
           </Button>
         </Container>

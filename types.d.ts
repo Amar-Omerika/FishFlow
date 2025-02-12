@@ -67,7 +67,7 @@ interface Window {
     addKorisnici: (korisnik: NewKorisnikData) => void;
     deleteKorisnik: (KorisnikID: number) => Promise<number>;
     updateKorisnik: (korisnik: NewKorisnikDataUpdate) => Promise<number>;
-    fetchAllKorisnikGodine: () => Promise<any>;
+    fetchAllKorisnikGodine: (filters: any) => Promise<any>;
     addKorisnikGodine: (korisnikGodine: KorisnikGodinaData) => void;
     deleteKorisnikGodine: (KorisnikGodineID: number) => Promise<number>;
     updateKorisnikGodine: (korisnikGodine: any) => Promise<number>;

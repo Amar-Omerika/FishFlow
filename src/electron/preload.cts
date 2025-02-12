@@ -16,7 +16,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
     ipcInvoke("deleteKorisnik", KorisnikID),
   updateKorisnik: (korisnik: any) => ipcInvoke("updateKorisnik", korisnik),
   fetchSekcije: () => ipcInvoke("fetchSekcije"),
-  fetchAllKorisnikGodine: () => ipcInvoke("fetchAllKorisnikGodine"),
+  fetchAllKorisnikGodine: (filters: any) =>
+    ipcInvoke("fetchAllKorisnikGodine", filters),
   addKorisnikGodine: (korisnikGodine: any) =>
     ipcInvoke("addKorisnikGodine", korisnikGodine),
   deleteKorisnikGodine: (KorisnikGodineID: number) =>

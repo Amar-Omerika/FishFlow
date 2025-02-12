@@ -106,14 +106,16 @@ export async function fetchSekcije() {
   return sekcije;
 }
 
-export async function fetchAllKorisnikGodine() {
+export async function fetchAllKorisnikGodine(filters: any = {}) {
   const db = await initDatabase();
-  const korisnikGodine = await db.all(`
+  const { sekcija, godina, imePrezime } = filters;
+
+  let query = `
     SELECT 
       Korisnici.ImePrezime, 
       Korisnici.JMBG, 
       Korisnici.AdresaStanovanja, 
-      Sekcije.NazivSekcije ,
+      Sekcije.NazivSekcije,
       KorisnikGodine.*
     FROM 
       KorisnikGodine 
@@ -125,7 +127,27 @@ export async function fetchAllKorisnikGodine() {
       Sekcije 
     ON 
       Korisnici.SekcijaID = Sekcije.SekcijaID
-  `);
+    WHERE 1=1
+  `;
+
+  const params: any[] = [];
+
+  if (sekcija) {
+    query += ` AND Sekcije.NazivSekcije = ?`;
+    params.push(sekcija);
+  }
+
+  if (godina) {
+    query += ` AND KorisnikGodine.Godina = ?`;
+    params.push(godina);
+  }
+
+  if (imePrezime) {
+    query += ` AND Korisnici.ImePrezime LIKE ?`;
+    params.push(`%${imePrezime}%`);
+  }
+  console.log("aaa", params);
+  const korisnikGodine = await db.all(query, params);
   return korisnikGodine;
 }
 

@@ -66,8 +66,8 @@ app.on("ready", async () => {
     );
   });
 
-  ipcMainHandle("fetchAllKorisnikGodine", async () => {
-    return await fetchAllKorisnikGodine();
+  ipcMainHandle("fetchAllKorisnikGodine", async (event, filters) => {
+    return await fetchAllKorisnikGodine(filters);
   });
 
   ipcMainHandle("addKorisnikGodine", async (event, korisnikGodine) => {
