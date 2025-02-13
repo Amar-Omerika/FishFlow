@@ -81,6 +81,12 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
         SekcijaID: parseInt(sekcijaID),
       });
       toast.success("Korisnik uspijesno dodan");
+      setKorisnikInfo({
+        imePrezime: "",
+        jmbg: "",
+        adresaStanovanja: "",
+        sekcijaID: "",
+      });
       onCreate();
       onClose();
     } catch (error) {

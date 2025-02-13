@@ -9,6 +9,7 @@ import {
   Typography,
   Modal,
   Paper,
+  Autocomplete,
   FormControl,
   InputLabel,
   Select,
@@ -104,6 +105,15 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
         Prijava,
       });
       toast.success("Korisnik Godina uspijesno dodan");
+      setKorisnikGodinaInfo({
+        KorisnikID: "",
+        BrojRegistra: "",
+        KontaktTelefon: "",
+        IznosKM: "",
+        Status: "",
+        Napomena: "",
+        Prijava: "",
+      });
       onCreate();
       onClose();
     } catch (error) {
@@ -155,29 +165,30 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                         },
                       }}
                     />
-                    <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-                      <InputLabel id="korisnik-label">Korisnik</InputLabel>
-                      <Select
-                        labelId="korisnik-label"
-                        id="korisnik-select"
-                        value={korisnikGodinaInfo.KorisnikID}
-                        onChange={handleChangeKorisnik as any}
-                        label="Korisnik"
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {korisnici &&
-                          korisnici.map((korisnik) => (
-                            <MenuItem
-                              key={korisnik.KorisnikID}
-                              value={korisnik.KorisnikID}
-                            >
-                              {korisnik.ImePrezime}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </FormControl>
+                    <Autocomplete
+                      id="korisnik-select"
+                      options={korisnici}
+                      getOptionLabel={(option) => option.ImePrezime}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Korisnik"
+                          variant="outlined"
+                        />
+                      )}
+                      value={
+                        korisnici.find(
+                          (k) => k.KorisnikID === korisnikGodinaInfo.KorisnikID
+                        ) || null
+                      }
+                      onChange={(event, newValue) => {
+                        setKorisnikGodinaInfo((prevState) => ({
+                          ...prevState,
+                          KorisnikID: newValue ? newValue.KorisnikID : "",
+                        }));
+                      }}
+                      sx={{ minWidth: 200, maxHeight: 300, overflow: "auto" }}
+                    />
                     <TextField
                       label="Broj Registra"
                       name="BrojRegistra"
