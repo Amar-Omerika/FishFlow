@@ -135,6 +135,14 @@ const Home = () => {
     fetchKorisnikGodine(filters, limit, 0);
   };
 
+  const handleResetFilters = () => {
+    setSection("");
+    setSelectedYear(dayjs());
+    setImePrezime("");
+    setPage(1);
+    fetchKorisnikGodine({}, limit, 0);
+  };
+
   const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -170,6 +178,7 @@ const Home = () => {
             id="outlined-basic"
             label="Ime Prezime"
             variant="outlined"
+            value={imePrezime}
             onChange={(e) => setImePrezime(e.target.value)}
           />
           <FormControl variant="outlined" sx={{ minWidth: 200 }}>
@@ -203,12 +212,24 @@ const Home = () => {
               },
             }}
           />
-          <Button
-            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
-            onClick={handleSearch}
-          >
-            Pretrazi
-          </Button>
+          <div style={{ display: "flex" }}>
+            <Button
+              style={{
+                backgroundColor: COLORS.primary,
+                color: "#fff",
+                marginRight: 10,
+              }}
+              onClick={handleResetFilters}
+            >
+              Reset
+            </Button>
+            <Button
+              style={{ backgroundColor: COLORS.primary, color: "#fff" }}
+              onClick={handleSearch}
+            >
+              Pretrazi
+            </Button>
+          </div>
         </Container>
         <div style={{ height: 20 }} />
         <CustomTable
