@@ -181,11 +181,19 @@ const Users = () => {
           onEdit={handleEditModalOpen}
           onDelete={handleDeleteModalOpen}
         />
-        <Pagination
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
-        />
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "start",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+          />
+        </div>
       </StyledContainer>
       <AddNewKorisnikModal
         isOpen={showAddModal}

@@ -91,10 +91,9 @@ export async function fetchAllKorisnici(
     countParams.push(`%${imePrezime}%`);
   }
 
-  query += ` LIMIT ? OFFSET ?`;
+  query += ` ORDER BY Korisnici.KorisnikID DESC LIMIT ? OFFSET ?`;
   params.push(limit, offset);
 
-  console.log(params);
   const korisnici = await db.all(query, params);
   const totalCountResult = await db.get(countQuery, countParams);
   const totalCount = totalCountResult.totalCount;
@@ -236,7 +235,7 @@ export async function fetchAllKorisnikGodine(
     countParams.push(`%${imePrezime}%`);
   }
 
-  query += ` LIMIT ? OFFSET ?`;
+  query += ` ORDER BY KorisnikGodine.KorisnikGodineID DESC LIMIT ? OFFSET ?`;
   params.push(limit, offset);
 
   const korisnikGodine = await db.all(query, params);
