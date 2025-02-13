@@ -151,8 +151,13 @@ const Home = () => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledContainer>
         <div
-          style={{ display: "flex", justifyContent: "end", marginTop: "10px" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "10px",
+          }}
         >
+          <h1>Clanovi po godinama</h1>
           <Button
             style={{
               backgroundColor: COLORS.primary,
@@ -164,6 +169,7 @@ const Home = () => {
             Dodaj Korisnika
           </Button>
         </div>
+
         <Container
           maxWidth="xl"
           disableGutters

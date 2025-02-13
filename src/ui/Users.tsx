@@ -116,6 +116,11 @@ const Users = () => {
     fetchKorisnici(filters, limit, 0);
   };
 
+  const handleResetFilters = () => {
+    setSection("");
+    setImePrezime("");
+    fetchKorisnici({}, limit, 0);
+  };
   const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -124,8 +129,13 @@ const Users = () => {
     <>
       <StyledContainer>
         <div
-          style={{ display: "flex", justifyContent: "end", marginTop: "10px" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "10px",
+          }}
         >
+          <h1>Svi Clanovi</h1>
           <Button
             style={{ backgroundColor: COLORS.primary, color: "#fff" }}
             onClick={handleAddKorisnikModal}
@@ -147,6 +157,7 @@ const Users = () => {
             id="outlined-basic"
             label="Ime Prezime"
             variant="outlined"
+            value={imePrezime}
             onChange={(e) => setImePrezime(e.target.value)}
           />
           <FormControl variant="outlined" sx={{ minWidth: 200 }}>
@@ -168,12 +179,24 @@ const Users = () => {
               ))}
             </Select>
           </FormControl>
-          <Button
-            style={{ backgroundColor: COLORS.primary, color: "#fff" }}
-            onClick={handleSearch}
-          >
-            Pretrazi
-          </Button>
+          <div style={{ display: "flex" }}>
+            <Button
+              style={{
+                backgroundColor: COLORS.primary,
+                color: "#fff",
+                marginRight: 10,
+              }}
+              onClick={handleResetFilters}
+            >
+              Reset
+            </Button>
+            <Button
+              style={{ backgroundColor: COLORS.primary, color: "#fff" }}
+              onClick={handleSearch}
+            >
+              Pretrazi
+            </Button>
+          </div>
         </Container>
         <div style={{ height: 20 }} />
         <CustomTable
