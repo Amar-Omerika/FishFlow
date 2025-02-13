@@ -131,6 +131,7 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                   <TextField
                     label="JMBG"
                     name="jmbg"
+                    type="number"
                     value={korisnikInfo.jmbg}
                     onChange={handleChange}
                     fullWidth

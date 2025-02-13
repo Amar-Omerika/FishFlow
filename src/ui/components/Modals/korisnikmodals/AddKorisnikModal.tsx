@@ -192,6 +192,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     <TextField
                       label="Broj Registra"
                       name="BrojRegistra"
+                      type="number"
                       value={korisnikGodinaInfo.BrojRegistra}
                       onChange={handleChange}
                       fullWidth
@@ -199,6 +200,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     <TextField
                       label="Kontakt Telefon"
                       name="KontaktTelefon"
+                      type="number"
                       value={korisnikGodinaInfo.KontaktTelefon}
                       onChange={handleChange}
                       fullWidth
@@ -206,6 +208,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                     <TextField
                       label="Iznos KM"
                       name="IznosKM"
+                      type="number"
                       value={korisnikGodinaInfo.IznosKM}
                       onChange={handleChange}
                       fullWidth

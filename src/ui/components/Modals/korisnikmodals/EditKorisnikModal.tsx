@@ -182,7 +182,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                     <TextField
                       label="Broj Registra"
                       name="BrojRegistra"
-                      multiline
+                      type="number"
                       value={korisnikGodineInfo?.BrojRegistra}
                       onChange={handleChange}
                       fullWidth
@@ -190,6 +190,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                     <TextField
                       label="Kontakt Telefon"
                       name="KontaktTelefon"
+                      type="number"
                       value={korisnikGodineInfo?.KontaktTelefon}
                       onChange={handleChange}
                       fullWidth
@@ -197,6 +198,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                     <TextField
                       label="Iznos KM"
                       name="IznosKM"
+                      type="number"
                       value={korisnikGodineInfo?.IznosKM}
                       onChange={handleChange}
                       fullWidth
