@@ -10,10 +10,6 @@ import {
   Modal,
   Paper,
   Autocomplete,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -42,7 +38,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     Prijava: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [_, setErrors] = useState({
     KorisnikID: "",
     BrojRegistra: "",
     KontaktTelefon: "",
@@ -73,13 +69,6 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     setErrors((prevState) => ({
       ...prevState,
       [name]: "",
-    }));
-  };
-
-  const handleChangeKorisnik = (event: any) => {
-    setKorisnikGodinaInfo((prevState) => ({
-      ...prevState,
-      KorisnikID: event.target.value as string,
     }));
   };
 
@@ -181,7 +170,7 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                           (k) => k.KorisnikID === korisnikGodinaInfo.KorisnikID
                         ) || null
                       }
-                      onChange={(event, newValue) => {
+                      onChange={(_, newValue) => {
                         setKorisnikGodinaInfo((prevState) => ({
                           ...prevState,
                           KorisnikID: newValue ? newValue.KorisnikID : "",

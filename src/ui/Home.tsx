@@ -31,7 +31,7 @@ const Home = () => {
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [_, setShowAddModal] = useState(false);
   const [showAddKorisnikGodinaModal, setShowAddKorisnikGodinaModal] =
     useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -143,7 +143,7 @@ const Home = () => {
     fetchKorisnikGodine({}, limit, 0);
   };
 
-  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 

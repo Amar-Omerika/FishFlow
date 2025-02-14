@@ -121,7 +121,7 @@ const Users = () => {
     setImePrezime("");
     fetchKorisnici({}, limit, 0);
   };
-  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 

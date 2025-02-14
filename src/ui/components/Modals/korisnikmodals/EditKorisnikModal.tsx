@@ -40,7 +40,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
     }
   }, [korisnikGodine]);
 
-  const [errors, setErrors] = useState({
+  const [_, setErrors] = useState({
     KorisnikID: "",
     BrojRegistra: "",
     KontaktTelefon: "",

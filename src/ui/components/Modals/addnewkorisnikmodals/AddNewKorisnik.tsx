@@ -33,7 +33,7 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     sekcijaID: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [_, setErrors] = useState({
     imePrezime: "",
     jmbg: "",
     adresaStanovanja: "",

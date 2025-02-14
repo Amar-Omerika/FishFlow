@@ -34,7 +34,7 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
     }
   }, [korisnik]);
 
-  const [errors, setErrors] = useState({
+  const [_, setErrors] = useState({
     imePrezime: "",
     jmbg: "",
     adresaStanovanja: "",
