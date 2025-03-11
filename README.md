@@ -1,50 +1,97 @@
-# React + TypeScript + Vite
+# FishFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FishFlow is an Electron application built with React and TypeScript. It provides a user interface for managing users and their associated data, including sections and yearly records. The application uses SQLite for data storage and provides various functionalities such as adding, updating, and deleting users and their records.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Electron**: For building cross-platform desktop applications
+- **React**: For building the user interface
+- **TypeScript**: For type-safe JavaScript
+- **SQLite**: For data storage
+- **Vite**: For fast development and build tooling
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js (v14 or higher)
+- npm (v6 or higher)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Installation
+
+1. Clone the repository:
+
+```sh
+git clone https://github.com/Amar-Omerika/FishFlow.git
+cd FishFlow
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+npm install
 ```
+
+### Development
+
+To start the application in development mode, run:
+
+```sh
+npm run dev
+```
+
+This will start both the React development server and the Electron application.
+
+### Build
+
+To build the application for production, run:
+
+```sh
+npm run build
+```
+
+This will compile the TypeScript code and bundle the React application.
+
+### Distribution
+
+To create a distributable package, run one of the following commands based on your target platform:
+
+```sh
+npm run dist:mac
+npm run dist:win
+npm run dist:linux
+```
+
+## File Descriptions
+
+### `src/electron/main.ts`
+
+This file is the main entry point for the Electron application. It initializes the main window, sets up IPC handlers, and manages the database connection.
+
+### `src/electron/database.ts`
+
+This file contains functions for interacting with the SQLite database, including initializing the database and performing CRUD operations.
+
+### `src/electron/pathResolver.ts`
+
+This file contains functions for resolving paths to the UI and preload scripts.
+
+### `src/electron/preload.cts`
+
+This file exposes Electron APIs to the renderer process using the `contextBridge`.
+
+### `src/electron/resourceManager.ts`
+
+This file contains functions for monitoring system resources (CPU, RAM, storage) and sending the data to the renderer process.
+
+### `src/electron/util.ts`
+
+This file contains utility functions for IPC communication and event validation.
+
+### `src/ui`
+
+This directory contains the React components and pages for the user interface.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
