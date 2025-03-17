@@ -2,10 +2,16 @@ import path from "path";
 import { app } from "electron";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
+import fs from "fs";
 
 export async function initDatabase() {
+  const dbPath = path.join(app.getPath("userData"), "database.sqlite");
+  //here we create db file in app.getPath("userData") directory
+  //C:\Users[korisnik]\AppData\Roaming[ime-aplikacije]\database.sqlite]
+
+  //path.join(app.getPath("home"), "database.sqlite") would create db file in user home directory
   const db = await open({
-    filename: path.join(app.getPath("home"), "database.sqlite"),
+    filename: dbPath,
     driver: sqlite3.Database,
   });
 
