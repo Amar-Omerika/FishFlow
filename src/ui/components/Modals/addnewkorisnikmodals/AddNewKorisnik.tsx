@@ -112,11 +112,19 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              exit={{ scale: 0.5, opacity: 0 }}
             >
-              <Paper sx={{ p: 4, borderRadius: 2 }}>
+              <Paper
+                sx={{
+                  p: 4,
+                  borderRadius: 2,
+                  width: "50vw",
+                  height: "50vh",
+                  overflow: "auto",
+                }}
+              >
                 <Typography variant="h6" gutterBottom>
                   Dodaj Korisnika
                 </Typography>
