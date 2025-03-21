@@ -50,10 +50,10 @@ const Navbar = () => {
             component="img"
             borderRadius={2}
             sx={{
-              height: 50,
-              width: 90,
-              maxHeight: { xs: 50, md: 50 },
-              maxWidth: { xs: 90, md: 90 },
+              width: "auto",
+              height: "50px",
+              maxWidth: "90px",
+              objectFit: "contain",
               display: { xs: "none", md: "flex" },
             }}
             alt="Logo"
