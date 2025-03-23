@@ -21,6 +21,13 @@ export async function initDatabase() {
       NazivSekcije TEXT NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS SekcijeAdrese (
+      AdresaID INTEGER PRIMARY KEY AUTOINCREMENT,
+      SekcijaID INTEGER NOT NULL,
+      Adresa TEXT NOT NULL,
+      FOREIGN KEY (SekcijaID) REFERENCES Sekcije(SekcijaID)
+    );
+
     CREATE TABLE IF NOT EXISTS Korisnici (
       KorisnikID INTEGER PRIMARY KEY AUTOINCREMENT,
       ImePrezime TEXT NOT NULL,
