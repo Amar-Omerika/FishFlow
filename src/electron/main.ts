@@ -15,6 +15,7 @@ import {
   updateKorisnikGodine,
   fetchAllKorisniciWithoutFilters,
   initDatabase,
+  fetchSekcijeAdrese,
 } from "./database.js";
 
 app.on("ready", async () => {
@@ -125,4 +126,8 @@ app.on("ready", async () => {
       Prijava
     );
   });
+});
+
+ipcMainHandle("fetchSekcijeAdrese", async (event, sekcijaID) => {
+  return await fetchSekcijeAdrese(sekcijaID);
 });
