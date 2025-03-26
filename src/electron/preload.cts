@@ -28,6 +28,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
   updateKorisnikGodine: (korisnikGodine: any) =>
     ipcInvoke("updateKorisnikGodine", korisnikGodine),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
+  fetchSekcijeAdrese: (sekcijaID?: number) =>
+    ipcInvoke("fetchSekcijeAdrese", sekcijaID),
 } satisfies Window["electron"]);
 
 //ipcInvoke: This method sends an asynchronous message from the renderer process to
