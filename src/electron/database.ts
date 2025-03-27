@@ -321,30 +321,6 @@ export async function updateKorisnikGodine(
   return result.changes;
 }
 
-export async function fetchSekcijeAdrese(SekcijaID?: number) {
-  const db = await initDatabase();
-  let query = `
-    SELECT 
-      SekcijeAdrese.*, 
-      Sekcije.NazivSekcije 
-    FROM 
-      SekcijeAdrese 
-    JOIN 
-      Sekcije 
-    ON 
-      SekcijeAdrese.SekcijaID = Sekcije.SekcijaID
-  `;
-
-  const params: any[] = [];
-
-  if (SekcijaID) {
-    query += ` WHERE SekcijeAdrese.SekcijaID = ?`;
-    params.push(SekcijaID);
-  }
-
-  const adrese = await db.all(query, params);
-  return adrese;
-}
 export async function findSekcijaByAddress(address: string) {
   const db = await initDatabase();
 
@@ -373,7 +349,7 @@ export async function findSekcijaByAddress(address: string) {
     `SELECT SekcijaID FROM SekcijeAdrese WHERE Adresa LIKE ? LIMIT 1`,
     [`%${address}%`]
   );
-  console.log(result);
+  // console.log(result);
 
   return result ? result.SekcijaID : null;
 }

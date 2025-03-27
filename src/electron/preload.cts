@@ -28,8 +28,6 @@ electron.contextBridge.exposeInMainWorld("electron", {
   updateKorisnikGodine: (korisnikGodine: any) =>
     ipcInvoke("updateKorisnikGodine", korisnikGodine),
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
-  fetchSekcijeAdrese: (sekcijaID?: number) =>
-    ipcInvoke("fetchSekcijeAdrese", sekcijaID),
   findSekcijaByAddress: (address: string) =>
     ipcInvoke("findSekcijaByAddress", address),
 } satisfies Window["electron"]);

@@ -53,7 +53,6 @@ type EventPayloadMapping = {
   updateKorisnikGodine: any;
   changeView: View;
   sendFrameAction: FrameWindowAction;
-  fetchSekcijeAdrese: any;
   findSekcijaByAddress: number | null;
 };
 
@@ -83,7 +82,6 @@ interface Window {
     addKorisnikGodine: (korisnikGodine: KorisnikGodinaData) => void;
     deleteKorisnikGodine: (KorisnikGodineID: number) => Promise<number>;
     updateKorisnikGodine: (korisnikGodine: any) => Promise<number>;
-    fetchSekcijeAdrese: (sekcijaID?: number) => Promise<any>;
     findSekcijaByAddress: (address: string) => Promise<number | null>;
     subscribeChangeView: (
       callback: (view: View) => void
