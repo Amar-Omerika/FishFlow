@@ -345,3 +345,35 @@ export async function fetchSekcijeAdrese(SekcijaID?: number) {
   const adrese = await db.all(query, params);
   return adrese;
 }
+export async function findSekcijaByAddress(address: string) {
+  const db = await initDatabase();
+
+  // First try exact match
+  let result = await db.get(
+    `SELECT SekcijaID FROM SekcijeAdrese WHERE Adresa = ? LIMIT 1`,
+    [address]
+  );
+
+  if (result) {
+    return result.SekcijaID;
+  }
+
+  // If no exact match, try partial match (contains)
+  result = await db.get(
+    `SELECT SekcijaID FROM SekcijeAdrese WHERE ? LIKE '%' || Adresa || '%' LIMIT 1`,
+    [address]
+  );
+
+  if (result) {
+    return result.SekcijaID;
+  }
+
+  // If still no match, try if address contains any of the sekcija addresses
+  result = await db.get(
+    `SELECT SekcijaID FROM SekcijeAdrese WHERE Adresa LIKE ? LIMIT 1`,
+    [`%${address}%`]
+  );
+  console.log(result);
+
+  return result ? result.SekcijaID : null;
+}

@@ -16,6 +16,7 @@ import {
   fetchAllKorisniciWithoutFilters,
   initDatabase,
   fetchSekcijeAdrese,
+  findSekcijaByAddress,
 } from "./database.js";
 
 app.on("ready", async () => {
@@ -130,4 +131,7 @@ app.on("ready", async () => {
 
 ipcMainHandle("fetchSekcijeAdrese", async (event, sekcijaID) => {
   return await fetchSekcijeAdrese(sekcijaID);
+});
+ipcMainHandle("findSekcijaByAddress", async (event, address) => {
+  return await findSekcijaByAddress(address);
 });
