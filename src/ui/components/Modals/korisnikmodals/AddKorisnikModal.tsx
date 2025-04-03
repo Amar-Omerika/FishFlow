@@ -136,8 +136,17 @@ const AddKorisnikModal: React.FC<AddKorisnikModalProps> = ({
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
+                style={{ width: "80vw", height: "80vh" }} // Set width & height to 80% of viewport
               >
-                <Paper sx={{ p: 4, borderRadius: 2 }}>
+                <Paper
+                  sx={{
+                    p: 4,
+                    borderRadius: 2,
+                    width: "80vw",
+                    height: "80vh",
+                    overflow: "auto",
+                  }}
+                >
                   <Typography variant="h6" gutterBottom>
                     Dodaj Korisnik Godina
                   </Typography>

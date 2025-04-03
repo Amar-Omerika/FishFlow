@@ -15,6 +15,7 @@ import {
   updateKorisnikGodine,
   fetchAllKorisniciWithoutFilters,
   initDatabase,
+  findSekcijaByAddress,
 } from "./database.js";
 
 app.on("ready", async () => {
@@ -125,4 +126,8 @@ app.on("ready", async () => {
       Prijava
     );
   });
+});
+
+ipcMainHandle("findSekcijaByAddress", async (event, address) => {
+  return await findSekcijaByAddress(address);
 });

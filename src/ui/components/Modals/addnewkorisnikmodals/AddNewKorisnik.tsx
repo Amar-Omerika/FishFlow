@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
@@ -39,7 +39,7 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
     adresaStanovanja: "",
     sekcijaID: "",
   });
-
+  const addressDebounceRef = useRef<any | null>(null);
   const [sekcije, setSekcije] = useState<any[]>([]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setKorisnikInfo((prevState) => ({
       ...prevState,
@@ -62,6 +62,31 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
       ...prevState,
       [name]: "",
     }));
+
+    // If address field changes, debounce the section lookup
+    if (name === "adresaStanovanja" && value) {
+      // Clear any existing timeout
+      if (addressDebounceRef.current) {
+        clearTimeout(addressDebounceRef.current);
+      }
+
+      // Set a new timeout (300ms delay before searching)
+      addressDebounceRef.current = setTimeout(async () => {
+        try {
+          const matchedSekcijaID = await window.electron.findSekcijaByAddress(
+            value
+          );
+          if (matchedSekcijaID) {
+            setKorisnikInfo((prevState) => ({
+              ...prevState,
+              sekcijaID: matchedSekcijaID.toString(),
+            }));
+          }
+        } catch (error) {
+          console.error("Error finding section for address:", error);
+        }
+      }, 300); // 300ms debounce delay
+    }
   };
 
   const handleChangeSection = (event: any) => {
@@ -112,11 +137,19 @@ const AddNewKorisnikModal: React.FC<AddKorisnikModalProps> = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              exit={{ scale: 0.5, opacity: 0 }}
             >
-              <Paper sx={{ p: 4, borderRadius: 2 }}>
+              <Paper
+                sx={{
+                  p: 4,
+                  borderRadius: 2,
+                  width: "50vw",
+                  height: "50vh",
+                  overflow: "auto",
+                }}
+              >
                 <Typography variant="h6" gutterBottom>
                   Dodaj Korisnika
                 </Typography>

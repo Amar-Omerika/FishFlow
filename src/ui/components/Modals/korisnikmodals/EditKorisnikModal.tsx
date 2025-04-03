@@ -32,6 +32,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
 }) => {
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(dayjs());
   const [korisnikGodineInfo, setKorisnikGodineInfo] = useState(korisnikGodine);
+  const [korisnici, setKorisnici] = useState<any[]>([]);
 
   useEffect(() => {
     if (korisnikGodine) {
@@ -39,18 +40,6 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
       setSelectedYear(dayjs().year(korisnikGodine.Godina));
     }
   }, [korisnikGodine]);
-
-  const [_, setErrors] = useState({
-    KorisnikID: "",
-    BrojRegistra: "",
-    KontaktTelefon: "",
-    IznosKM: "",
-    Status: "",
-    Napomena: "",
-    Prijava: "",
-  });
-
-  const [korisnici, setKorisnici] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchKorisnici = async () => {
@@ -60,59 +49,25 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
     fetchKorisnici();
   }, []);
 
-  if (!isOpen) return null;
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setKorisnikGodineInfo((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
-    setErrors((prevState) => ({
-      ...prevState,
-      [name]: "",
-    }));
-  };
-
-  const handleChangeKorisnik = (event: any) => {
-    setKorisnikGodineInfo((prevState: any) => ({
-      ...prevState,
-      KorisnikID: event.target.value as string,
-    }));
   };
 
   const handleUpdate = async () => {
     try {
-      const {
-        KorisnikGodineID,
-        KorisnikID,
-        BrojRegistra,
-        KontaktTelefon,
-        IznosKM,
-        Status,
-        Napomena,
-        Prijava,
-      } = korisnikGodineInfo;
       await window.electron.updateKorisnikGodine({
-        KorisnikGodineID,
+        ...korisnikGodineInfo,
         Godina: selectedYear?.year() || 0,
-        KorisnikID: parseInt(KorisnikID),
-        BrojRegistra,
-        KontaktTelefon,
-        IznosKM: parseFloat(IznosKM),
-        Status,
-        Napomena,
-        Prijava,
       });
-      toast.success("Korisnik Godina uspijesno azuriran");
+      toast.success("Korisnik Godina uspješno ažuriran");
       onClose();
     } catch (error) {
-      toast.error("Greska pri azuriranju korisnika godine");
+      toast.error("Greška pri ažuriranju korisnika godine");
     }
-  };
-
-  const handleYearChange = (newValue: Dayjs | null) => {
-    setSelectedYear(newValue);
   };
 
   return ReactDOM.createPortal(
@@ -137,8 +92,17 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
+                style={{ width: "80vw", height: "80vh" }}
               >
-                <Paper sx={{ p: 4, borderRadius: 2 }}>
+                <Paper
+                  sx={{
+                    p: 4,
+                    borderRadius: 2,
+                    width: "80vw",
+                    height: "80vh",
+                    overflow: "auto",
+                  }}
+                >
                   <Typography variant="h6" gutterBottom>
                     Uredi Korisnik Godina
                   </Typography>
@@ -147,7 +111,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       views={["year"]}
                       label="Odaberi Godinu"
                       value={selectedYear}
-                      onChange={handleYearChange}
+                      onChange={setSelectedYear}
                       slots={{ textField: TextField }}
                       slotProps={{
                         textField: {
@@ -155,28 +119,23 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                         },
                       }}
                     />
-                    <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+                    <FormControl variant="outlined" fullWidth>
                       <InputLabel id="korisnik-label">Korisnik</InputLabel>
                       <Select
                         labelId="korisnik-label"
                         id="korisnik-select"
                         disabled
                         value={korisnikGodineInfo?.KorisnikID}
-                        onChange={handleChangeKorisnik as any}
                         label="Korisnik"
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {korisnici &&
-                          korisnici.map((korisnik) => (
-                            <MenuItem
-                              key={korisnik?.KorisnikID}
-                              value={korisnik?.KorisnikID}
-                            >
-                              {korisnik?.ImePrezime}
-                            </MenuItem>
-                          ))}
+                        {korisnici.map((korisnik) => (
+                          <MenuItem
+                            key={korisnik?.KorisnikID}
+                            value={korisnik?.KorisnikID}
+                          >
+                            {korisnik?.ImePrezime}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                     <TextField
@@ -210,7 +169,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       onChange={handleChange}
                       fullWidth
                       multiline
-                      maxRows={3}
+                      rows={3}
                     />
                     <TextField
                       label="Napomena"
@@ -219,7 +178,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       onChange={handleChange}
                       fullWidth
                       multiline
-                      maxRows={3}
+                      rows={3}
                     />
                     <TextField
                       label="Prijava"
@@ -228,7 +187,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                       onChange={handleChange}
                       fullWidth
                       multiline
-                      maxRows={3}
+                      rows={3}
                     />
                     <Box
                       sx={{
@@ -241,7 +200,7 @@ const EditKorisnikGodine: React.FC<EditKorisnikModalProps> = ({
                         Prekini
                       </Button>
                       <Button variant="contained" onClick={handleUpdate}>
-                        Azuriraj
+                        Ažuriraj
                       </Button>
                     </Box>
                   </Box>

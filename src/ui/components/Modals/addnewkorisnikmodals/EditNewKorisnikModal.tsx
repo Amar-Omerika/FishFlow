@@ -65,13 +65,10 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
     }));
   };
 
-  const handleChangeSection = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    const selectedValue = event.target.value as string;
+  const handleChangeSection = (event: any) => {
     setKorisnikInfo((prevState: any) => ({
       ...prevState,
-      SekcijaID: selectedValue,
+      SekcijaID: event.target.value,
     }));
   };
 
@@ -86,10 +83,10 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
         AdresaStanovanja,
         SekcijaID: parseInt(SekcijaID),
       });
-      toast.success("Korisnik uspijesno azuriran");
+      toast.success("Korisnik uspješno ažuriran");
       onClose();
     } catch (error) {
-      toast.error("Greska pri azuriranju korisnika");
+      toast.error("Greška pri ažuriranju korisnika");
     }
   };
 
@@ -115,7 +112,15 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
             >
-              <Paper sx={{ p: 4, borderRadius: 2 }}>
+              <Paper
+                sx={{
+                  p: 4,
+                  borderRadius: 2,
+                  width: "50vw",
+                  height: "50vh",
+                  overflow: "auto",
+                }}
+              >
                 <Typography variant="h6" gutterBottom>
                   Uredi Korisnika
                 </Typography>
@@ -154,30 +159,25 @@ const EditNewKorisnikModal: React.FC<EditNewKorisnikModalProps> = ({
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {sekcije &&
-                        sekcije.map((sekcija) => (
-                          <MenuItem
-                            key={sekcija.SekcijaID}
-                            value={sekcija.SekcijaID}
-                          >
-                            {sekcija.NazivSekcije}
-                          </MenuItem>
-                        ))}
+                      {sekcije.map((sekcija) => (
+                        <MenuItem
+                          key={sekcija.SekcijaID}
+                          value={sekcija.SekcijaID}
+                        >
+                          {sekcija.NazivSekcije}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
 
                   <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      mt: 2,
-                    }}
+                    sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}
                   >
                     <Button onClick={onClose} sx={{ mr: 2 }}>
                       Prekini
                     </Button>
                     <Button variant="contained" onClick={handleUpdate}>
-                      Azuriraj
+                      Ažuriraj
                     </Button>
                   </Box>
                 </Box>
