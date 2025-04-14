@@ -8,6 +8,7 @@ import {
   FormControl,
   InputLabel,
   Pagination,
+  Typography,
 } from "@mui/material";
 
 import { styled } from "@mui/system";
@@ -24,6 +25,9 @@ const StyledContainer = styled(Container)({
 });
 
 const Users = () => {
+  const [sectionMemberCount, setSectionMemberCount] = useState<number | null>(
+    null
+  );
   const [data, setData] = useState<any[]>([]);
   const [section, setSection] = useState<string>("");
   const [imePrezime, setImePrezime] = useState<string>("");
@@ -63,10 +67,24 @@ const Users = () => {
     fetchSekcije();
   }, []);
 
-  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
-    setSection(event.target.value as string);
-  };
+  // const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+  //   setSection(event.target.value as string);
+  // };
 
+  const handleChange = async (event: ChangeEvent<{ value: unknown }>) => {
+    const newSectionValue = event.target.value as string;
+    setSection(newSectionValue);
+
+    // Get count of members when section changes
+    if (newSectionValue) {
+      const count = await window.electron.countKorisniciBySekcija(
+        newSectionValue
+      );
+      setSectionMemberCount(count);
+    } else {
+      setSectionMemberCount(null);
+    }
+  };
   const handleAddKorisnikModal = () => {
     setShowAddModal(true);
   };
@@ -119,6 +137,7 @@ const Users = () => {
   const handleResetFilters = () => {
     setSection("");
     setImePrezime("");
+    setSectionMemberCount(null);
     fetchKorisnici({}, limit, 0);
   };
   const handlePageChange = (_: ChangeEvent<unknown>, value: number) => {
@@ -198,6 +217,14 @@ const Users = () => {
             </Button>
           </div>
         </Container>
+        {section && sectionMemberCount !== null && (
+          <Typography
+            variant="subtitle1"
+            sx={{ mt: 2, mb: 1, color: COLORS.primary, fontWeight: "bold" }}
+          >
+            Broj članova u sekciji: {sectionMemberCount}
+          </Typography>
+        )}
         <div style={{ height: 20 }} />
         <CustomTable
           rows={data}

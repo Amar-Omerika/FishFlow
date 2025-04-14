@@ -16,6 +16,7 @@ import {
   fetchAllKorisniciWithoutFilters,
   initDatabase,
   findSekcijaByAddress,
+  countKorisniciBySekcija,
 } from "./database.js";
 
 app.on("ready", async () => {
@@ -130,4 +131,9 @@ app.on("ready", async () => {
 
 ipcMainHandle("findSekcijaByAddress", async (event, address) => {
   return await findSekcijaByAddress(address);
+});
+
+// Add this with your other IPC handlers
+ipcMainHandle("countKorisniciBySekcija", async (event, SekcijaID) => {
+  return await countKorisniciBySekcija(SekcijaID);
 });

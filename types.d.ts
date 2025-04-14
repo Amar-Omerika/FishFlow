@@ -54,6 +54,7 @@ type EventPayloadMapping = {
   changeView: View;
   sendFrameAction: FrameWindowAction;
   findSekcijaByAddress: number | null;
+  countKorisniciBySekcija: number;
 };
 
 type UnsubscribeFunction = () => void;
@@ -83,6 +84,7 @@ interface Window {
     deleteKorisnikGodine: (KorisnikGodineID: number) => Promise<number>;
     updateKorisnikGodine: (korisnikGodine: any) => Promise<number>;
     findSekcijaByAddress: (address: string) => Promise<number | null>;
+    countKorisniciBySekcija: (SekcijaID: number | string) => Promise<number>;
     subscribeChangeView: (
       callback: (view: View) => void
     ) => UnsubscribeFunction;

@@ -353,3 +353,24 @@ export async function findSekcijaByAddress(address: string) {
 
   return result ? result.SekcijaID : null;
 }
+export async function countKorisniciBySekcija(SekcijaID: number | string) {
+  const db = await initDatabase();
+
+  if (typeof SekcijaID === "string") {
+    // If we're filtering by NazivSekcije (string) instead of SekcijaID (number)
+    const result = await db.get(
+      `SELECT COUNT(*) as count FROM Korisnici 
+       JOIN Sekcije ON Korisnici.SekcijaID = Sekcije.SekcijaID
+       WHERE Sekcije.NazivSekcije = ?`,
+      [SekcijaID]
+    );
+    return result.count;
+  } else {
+    // If we're filtering by SekcijaID (number)
+    const result = await db.get(
+      `SELECT COUNT(*) as count FROM Korisnici WHERE SekcijaID = ?`,
+      [SekcijaID]
+    );
+    return result.count;
+  }
+}

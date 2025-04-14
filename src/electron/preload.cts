@@ -30,6 +30,9 @@ electron.contextBridge.exposeInMainWorld("electron", {
   sendFrameAction: (payload: any) => ipcSend("sendFrameAction", payload),
   findSekcijaByAddress: (address: string) =>
     ipcInvoke("findSekcijaByAddress", address),
+  // Add this to the electron object
+  countKorisniciBySekcija: (SekcijaID: number | string) =>
+    ipcInvoke("countKorisniciBySekcija", SekcijaID),
 } satisfies Window["electron"]);
 
 //ipcInvoke: This method sends an asynchronous message from the renderer process to
